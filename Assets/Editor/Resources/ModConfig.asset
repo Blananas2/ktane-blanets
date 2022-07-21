@@ -11,10 +11,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
   m_Name: ModConfig
   m_EditorClassIdentifier: 
-  id: planetaryModPack
-  title: Planetary Mod Pack
+  id: blanets
+  title: Blanets
   author: Blananas2
-  description: '*Not to scale, or realistic in any other manner to be honest.'
+  description: "*Not to scale, or realistic in any other manner to be honest.\n\nCredits:\r\nOriginal
+    Concept by Blan\r\nModels by Blan\r\n\r\n\u263F: Basic idea by Kiki, Module by
+    Blan\r\n\u2640: Module by Blan\r\n\u2641: Module by Blan\r\n\u2642: Module by
+    TasThing\r\n\u2643: Module by Deaf, Reimplemented by Blan\r\n\u2644: Module by
+    eXish\r\n\u2645: Module by tandyCake\r\n\u2646: Module by Blan, Help by BakersDozenBagels,
+    tandyCake, Quinn Wuest\n\u2647: Idea by Fish, Implemented by Blan"
   version: 1.0
   outputFolder: build
   previewImage: {fileID: 0}
