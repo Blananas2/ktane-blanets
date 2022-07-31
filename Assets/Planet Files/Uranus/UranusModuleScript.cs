@@ -270,64 +270,44 @@ public class UranusModuleScript : MonoBehaviour
             yield return new WaitForSeconds(0.4f);
         }
     }
+    
     IEnumerator TwitchHandleForcedSolve()
     {
-        yield break;
-    }
-    private List<string> FindPath()
-    {
-        Queue<QueueItem> q = new Queue<QueueItem>();
-        List<Movement> allMoves = new List<Movement>();
-        q.Enqueue(new QueueItem(currentPosition, previousCell, currentValue, moveCounter % 2 == 1));
-        while (q.Count > 0)
-        {
-            QueueItem cur = q.Dequeue();
-            foreach (KeyValuePair<string, int> movement in GetAdjacents(cur.cell))
-            {
-                int newCell = movement.Value;
-                if (newCell != cur.prevCell)
-                {
-                    int newScore = cur.subtract ? cur.score - ValueTable[newCell] : cur.score + ValueTable[newCell];
-                    q.Enqueue(new QueueItem(newCell, cur.cell, newScore, !cur.subtract));
-                    allMoves.Add(new Movement(cur.cell, newCell, movement.Key, newScore));
-                }
-            }
-            if (cur.score == targetValue)
-                break;
-        }
-        Movement lastMove = allMoves.First(x => x.score == targetValue);
+        int attempts = 0;
+        solving:
+        int cap = attempts / 200 + 10;
+        int virtualCurrentCell = currentPosition;
+        int virtualCurrentValue = currentValue;
+        int virtualMoveCounter = 0;
         List<string> path = new List<string>();
-        while (lastMove.start != currentPosition)
+        int virtualPrev = previousCell;
+        while (virtualCurrentValue != targetValue)
         {
-            lastMove = allMoves.First(x => x.end == lastMove.start);
-            path += lastMove.direction;
+            KeyValuePair<string, int> move = GetAdjacents(virtualCurrentCell).Where(x => x.Value != virtualPrev).PickRandom();
+            path.Add(move.Key);
+            virtualPrev = virtualCurrentCell;
+            virtualCurrentCell = move.Value;
+            virtualCurrentValue += (virtualMoveCounter % 2 == 0) ? ValueTable[virtualCurrentCell] : -1 * ValueTable[virtualCurrentCell];
+            virtualMoveCounter++;
+            attempts++;
         }
-        return path.Reverse().Join("");
-    }
-}
-public struct QueueItem
-{
-    public int cell, prevCell, score;
-    public bool subtract;
-
-    public QueueItem(int cell, int prevCell, int score, bool subtract)
-    {
-        this.cell = cell;
-        this.prevCell = prevCell;
-        this.score = score;
-        this.subtract = subtract;
-    }
-}
-public class Movement
-{
-    public int start, end, score;
-    public string direction;
-    public Movement prev = null;
-    public Movement(int start, int end, string direction, int score)
-    {
-        this.start = start;
-        this.end = end;
-        this.direction = direction;
-        this.score = score;
+        Debug.Log("End value: " + virtualCurrentValue);
+        if (attempts > 200)
+        {
+            attempts = 0;
+            cap++;
+        }
+        if (path.Count > cap)
+        {
+            goto solving;
+        }
+        int[][] pairs = new int[][] { new int[] { 2, 0 }, new int[] { 2, 3 }, new int[] { 1, 3 }, new int[] { 0, 3 }, new int[] { 0, 2 }, new int[] { 0, 1 }, new int[] { 3, 1 }, new int[] { 3, 0 } };
+        foreach (string movement in path)
+        {
+            int[] action = pairs[Array.IndexOf(directions, movement)];
+            PlanetButtons[action[0]].OnInteract();
+            PlanetButtons[action[1]].OnInteractEnded();
+            yield return new WaitForSeconds(0.4f);
+        }
     }
 }

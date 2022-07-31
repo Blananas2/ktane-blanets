@@ -295,6 +295,7 @@ public class PlutoScript : MonoBehaviour { //depends on name
                 Background.transform.localScale += new Vector3(0f, 0.01f, 0f); //depends on size of the planet
             }
             Visible = !Visible;
+            AsteroidsObj.SetActive(Visible);
             Planet.SetActive(Visible);
             for (int i = 0; i < 25; i++) {
                 yield return new WaitForSeconds(0.05f);
