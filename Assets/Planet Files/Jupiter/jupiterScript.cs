@@ -160,10 +160,10 @@ public class jupiterScript : MonoBehaviour {
 			}
 		} else if (Ruleset[1]) {
 			switch (n) {
-				case 4: if (pc == 5) { ConnectorNode(11); } else { ConnectorNode(5); } break;
+				case 4: if (pc == 5) { ConnectorNode(19); } else { ConnectorNode(5); } break;
 				case 6: if (pc == 13) { ConnectorNode(5); } else { ConnectorNode(13); } break;
-				case 18: if (pc == 19) { ConnectorNode(13); } else { ConnectorNode(19); } break;
-				case 20: if (pc == 11) { ConnectorNode(19); } else { ConnectorNode(11); } break;
+				case 18: if (pc == 19) { ConnectorNode(13); } else { ConnectorNode(11); } break;
+				case 20: if (pc == 11) { ConnectorNode(11); } else { ConnectorNode(19); } break;
 			}
 		} else if (Ruleset[2]) {
 			switch (n) {
@@ -239,7 +239,7 @@ public class jupiterScript : MonoBehaviour {
 		if (Ruleset[0]) {
 			switch (n) {
 				case 2: case 10: case 14: case 17: StandardNode(4); break;
-				case 5: case 7: case 15: case 16: StandardNode(6); break;
+				case 7: case 8: case 15: case 16: StandardNode(6); break;
 				case 0: case 3: case 21: case 22: StandardNode(20); break;
 				case 1: case 9: case 23: case 24: StandardNode(18); break;
 			}
