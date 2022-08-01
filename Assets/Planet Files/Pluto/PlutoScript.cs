@@ -60,6 +60,8 @@ public class PlutoScript : MonoBehaviour { //depends on name
     void Awake () {
         moduleId = moduleIdCounter++;
 
+        Bomb.OnBombExploded += delegate { StopAllCoroutines(); }; //This should stop the sound effect when hitting reset, in theory.
+
         foreach (KMSelectable Asteroid in Asteroids) {
             Asteroid.OnInteract += delegate () { AsteroidPress(Asteroid); return false; };
             Asteroid.OnHighlight += delegate { Hover(Asteroid); return; };

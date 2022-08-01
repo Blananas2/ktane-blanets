@@ -236,6 +236,7 @@ public class UranusModuleScript : MonoBehaviour
         }
         Visible = !Visible;
         WholeThing.SetActive(Visible);
+        Planet.SetActive(Visible);
         yield return new WaitForSecondsRealtime(0.5f);
         while (Background.transform.localPosition.y > -0.008)
         {

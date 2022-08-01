@@ -7,10 +7,10 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using KModkit;
 
-/**************************************************************************************
-This version of the code was created by Blananas2 in its entirety on March 3rd 2022.
+/*******************************************************************************************
+The original version of the code was created by Blananas2 in its entirety on March 3rd 2022.
 See Jupiter.cs if you're curious what the first version of the source code looked like.
-**************************************************************************************/
+*******************************************************************************************/
 
 public class jupiterScript : MonoBehaviour { 
 
@@ -238,10 +238,10 @@ public class jupiterScript : MonoBehaviour {
 
 		if (Ruleset[0]) {
 			switch (n) {
-				case 0: case 3: case 21: case 22: StandardNode(4); break;
-				case 1: case 9: case 23: case 24: StandardNode(6); break;
-				case 2: case 10: case 14: case 17: StandardNode(20); break;
-				case 7: case 8: case 15: case 16: StandardNode(18); break;
+				case 2: case 10: case 14: case 17: StandardNode(4); break;
+				case 5: case 7: case 15: case 16: StandardNode(6); break;
+				case 0: case 3: case 21: case 22: StandardNode(20); break;
+				case 1: case 9: case 23: case 24: StandardNode(18); break;
 			}
 		} else if (Ruleset[1]) {
 			switch (n) {
