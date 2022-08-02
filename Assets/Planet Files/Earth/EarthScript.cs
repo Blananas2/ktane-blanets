@@ -231,11 +231,14 @@ public class EarthScript : MonoBehaviour { //depends on name
                     for (int j = 0; j < 48; j ++) {
                         ActualButtons[j].GetComponent<MeshRenderer>().material = Colors[0];
                     }
-                    for (int k = 0; k < 3; k++) {
-                        ActualButtons[tris[endingTri][k]].GetComponent<MeshRenderer>().material = Colors[2];
-                        ActualButtons[tris[currentTri][k]].GetComponent<MeshRenderer>().material = Colors[1];
-                        if (tris[endingTri].Contains(tris[currentTri][k])) {
-                            ActualButtons[tris[currentTri][k]].GetComponent<MeshRenderer>().material = Colors[3];
+                    for (int k = 0; k < 6; k++) {
+                        if (k < 3) {
+                            ActualButtons[tris[endingTri][k]].GetComponent<MeshRenderer>().material = Colors[2];
+                            ActualButtons[tris[currentTri][k]].GetComponent<MeshRenderer>().material = Colors[1];
+                        } else {
+                            if (tris[endingTri].Contains(tris[currentTri][k-3])) {
+                                ActualButtons[tris[currentTri][k-3]].GetComponent<MeshRenderer>().material = Colors[3];
+                            }
                         }
                     }
                     if (currentTri == endingTri) {
