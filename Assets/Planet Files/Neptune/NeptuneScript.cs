@@ -66,7 +66,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
         RNGToLetters();
 
         chosenStar = UnityEngine.Random.Range(0, 120);
-        Debug.LogFormat("[Neptune #{0}] Star is {1}.", moduleId, NeptuneData.LoggedStars[chosenStar]);
+        Debug.LogFormat("[Neptune #{0}] Star is {1} / {2}.", moduleId, NeptuneData.LoggedAbbrs[chosenStar], NeptuneData.LoggedStars[chosenStar]);
 
         if (!NeptuneData.HasEnemies[chosenStar]) {
             Debug.LogFormat("[Neptune #{0}] That star in the table has Ø or N/A.", moduleId);
@@ -77,7 +77,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
             } else {
                 usedStar = NeptuneData.EvenArrow[starIx];
             }
-            Debug.LogFormat("[Neptune #{0}] New star is {1}.", moduleId, NeptuneData.LoggedStars[usedStar]);
+            Debug.LogFormat("[Neptune #{0}] New star is {1} / {2}.", moduleId, NeptuneData.LoggedAbbrs[usedStar], NeptuneData.LoggedStars[usedStar]);
         } else {
             usedStar = chosenStar;
         }
