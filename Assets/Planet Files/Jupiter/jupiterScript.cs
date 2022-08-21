@@ -23,7 +23,8 @@ public class jupiterScript : MonoBehaviour {
     public GameObject Background;
 	public GameObject StatusLightPosition;
 
-    bool Visible = true;
+    bool visible = true;
+	bool isAnimating;
 	int MoonCount, SunCount;
 	bool Unicorn;
 	int CurrentNumber;
@@ -466,18 +467,15 @@ public class jupiterScript : MonoBehaviour {
    }
 
     private IEnumerator HidePlanet() {
-        for (int i = 0; i < 25; i++) {
-            yield return new WaitForSeconds(0.05f);
-            Background.transform.localScale += new Vector3(0f, 0.02f, 0f); 
-        }
-        Visible = !Visible;
-        Planet.SetActive(Visible);
-        for (int i = 0; i < 25; i++) {
-            yield return new WaitForSeconds(0.05f);
-            Background.transform.localScale -= new Vector3(0f, 0.02f, 0f); 
-        }
-        Debug.LogFormat("<Jupiter #{0}> Visible toggled to {1}.", moduleId, Visible);
-        yield return null;
-    }
+		if (isAnimating) yield break;
+		isAnimating = true;
+		if (visible)
+			yield return AnimationCoroutine.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0.15f, 0, d) * Vector3.one);
+		else
+			yield return AnimationCoroutine.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0, 0.15f, d) * Vector3.one);
+		visible = !visible;
+		Debug.LogFormat("<Jupiter #{0}> Visibility toggled to {1}.", moduleId, visible);
+		isAnimating = false;
+	}
 
 }

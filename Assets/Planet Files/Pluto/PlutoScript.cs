@@ -32,8 +32,9 @@ public class PlutoScript : MonoBehaviour { //depends on name
 
     public KMSelectable Pluto;
 
-    bool Visible = true;
+    bool visible = true;
     bool PVPvisible = false;
+    bool theGoblinsWereAwakened;
 
     string[] ityWords = { "???ity", "Ability", "Abnormality", "Acidity", "Activity", "Adjustability", "Adorability", "Affectivity", "Alcoholicity", "Alienability", "Ambidexterity", "Ambiguity", "Anonymity", "Antigravity", "Antirationality", "Antistability", "Anxiety", "Atrocity", "Audibility", "Authenticity", "Authority", "Availability", "Brutality", "Bumpscocity", "Calculability", "Capacity", "Captivity", "Causality", "Celebrity", "City", "Clarity", "Community", "Complexity", "Conformity", "Convexity", "Countability", "Creativity", "Cubicity", "Curiosity", "Cylindricality", "Decipherability", "Defusivity", "Density", "Detonability", "Dexterity", "Diffusivity", "Digisibility", "Directionality", "Disability", "Discoverability", "Diversity", "Divinity", "Divisibility", "Duality", "Effectivity", "Elasticity", "Electricity", "Ellipticity", "Emotivity", "Enjoyability", "Entity", "Equality", "Ethnicity", "Exclusivity", "Exemplarity", "Exhaustivity", "Expandability", "Expansivity", "Expendability", "Extendability", "Facility", "Familiarity", "Feasibility", "Festivity", "Fishability", "Flammability", "Flexibility", "Fragility", "Fungibility", "Generosity", "Gradability", "Gravity", "Habitability", "Hatchability", "Hexeractivity", "Hideosity", "Horizontality", "Hostility", "Humanity", "Humidity", "Hydrophilicity", "Hydrophobicity", "Hypnotizability", "Identity", "Immaturity", "Impartiality", "Impenetrability", "Impossibility", "Inaccessability", "Inferiority", "Infinity", "Insanity", "Integrity", "Intensity", "Invincibilty", "Irrationality", "Irrefutability", "Irresistibilty", "Irritability", "Jusitifiability", "Linearity", "Liquidity", "Logicality", "Luminosity", "Majority", "Maturity", "Minority", "Mobility", "Monstrosity", "Mortality", "Multiplicity", "Nationality", "Nebulosity", "Negative Infinity", "Negativity", "Neuralplasticity", "Nonexclusivity", "Normality", "Nudity", "Obesity", "Objectivity", "Obscenity", "Obscurity", "Oddity", "Orbity", "Originality", "Oviparity", "Packability", "Paradoxicality", "Parity", "Peculiarity", "Perpetuality", "Personality", "Plasticity", "Plausibility", "Popularity", "Possibility", "Pregnability", "Probability", "Profanity", "Programability", "Proximity", "Pseudonymity", "Punctuality", "Purity", "Quadruplicity", "Quality", "Quantity", "Quotability", "Rarity", "Rationality", "Rhythmicity", "Sanity", "Scarcity", "Security", "Seismicity", "Sensitivity", "Serendipity", "Sexuality", "Shrinkability", "Similarity", "Simplicity", "Solutbility", "Sorority", "Sphericity", "Stability", "Stickability", "Stupidity", "Subjectivity", "Superiority", "Tensegrity", "Tesseractivity", "Tonality", "Totality", "Toxicity", "Tranquility", "Translatibility", "Uncountability", "Unilaterality", "University", "Usability", "Utility", "Validity", "Veracity", "Verticality", "Viscocity", "Visibility", "Vulgarity", "Vulnerability", "Washability" };
     int[] sliderStates = { 0, 0, 0, 0 };
@@ -56,6 +57,7 @@ public class PlutoScript : MonoBehaviour { //depends on name
     static int moduleIdCounter = 1;
     int moduleId;
     private bool moduleSolved;
+    private bool isAnimating;
 
     void Awake () {
         moduleId = moduleIdCounter++;
@@ -111,7 +113,9 @@ public class PlutoScript : MonoBehaviour { //depends on name
     void PVPtoggle() {
         PVPvisible = !PVPvisible;
         PVPobj.SetActive(PVPvisible);
-        AsteroidsObj.SetActive(true);
+        theGoblinsWereAwakened = true;
+        if (visible)
+            AsteroidsObj.SetActive(true);
         StartCoroutine(AsteroidRotation());
         StartCoroutine(MergeSort());
     }
@@ -291,19 +295,16 @@ public class PlutoScript : MonoBehaviour { //depends on name
     }
 
     private IEnumerator HidePlanet() {
-        if (!moduleSolved) {
-            for (int i = 0; i < 25; i++) {
-                yield return new WaitForSeconds(0.05f);
-                Background.transform.localScale += new Vector3(0f, 0.01f, 0f); //depends on size of the planet
-            }
-            Visible = !Visible;
-            AsteroidsObj.SetActive(Visible);
-            Planet.SetActive(Visible);
-            for (int i = 0; i < 25; i++) {
-                yield return new WaitForSeconds(0.05f);
-                Background.transform.localScale -= new Vector3(0f, 0.01f, 0f); //see above
-            }
-            Debug.LogFormat("<Pluto #{0}> Visible toggled to {1}.", moduleId, Visible);   
+        if (!moduleSolved && !isAnimating) {
+            isAnimating = true;
+            yield return AnimationCoroutine.Animation(0.5f, d => Background.transform.transform.transform.transform.transform.transform.transform.localScale = new Vector3(1, Mathf.Lerp(1, 10, d), 1));
+            visible = !visible;
+            if (theGoblinsWereAwakened)
+                AsteroidsObj.SetActive(visible);
+            Planet.SetActive(visible);
+            yield return AnimationCoroutine.Animation(0.5f, d => Background.transform.transform.transform.transform.transform.transform.transform.transform.localScale = new Vector3(1, Mathf.Lerp(10, 1, d), 1));
+            Debug.LogFormat("<Pluto #{0}> Visible toggled to {1}.", moduleId, visible);
+            isAnimating = false;
         }
         yield return null;
     }

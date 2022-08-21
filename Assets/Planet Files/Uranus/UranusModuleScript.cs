@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using KModkit;
 
@@ -13,14 +12,14 @@ public class UranusModuleScript : MonoBehaviour
     public KMAudio Audio;
 
     public KMSelectable HideButton;
-    public GameObject WholeThing, Background, Planet;
+    public GameObject WholeThing, Planet;
+    public Transform Background;
     public Transform modTF, parentTF, childTF;
 
     public KMSelectable[] PlanetButtons;
     public MeshRenderer[] highlightIndicators;
     public Material[] SphereColors;
 
-    bool Visible = true;
     bool isAnimating;
     bool TwitchPlaysActive;
 
@@ -57,6 +56,8 @@ public class UranusModuleScript : MonoBehaviour
     int currentValue = 0;
     int moveCounter = 0;
     int previousCell = -1;
+    private bool visible;
+
     void Awake()
     {
         moduleId = moduleIdCounter++;
@@ -228,24 +229,14 @@ public class UranusModuleScript : MonoBehaviour
     {
         if (isAnimating) yield break;
         isAnimating = true;
-        while (Background.transform.localPosition.y < 0.06)
-        {
-            Background.transform.localPosition += new Vector3(0, 0.0025f, 0);
-            Background.transform.localScale += new Vector3(0, 0.005f, 0);
-            yield return null;
-        }
-        Visible = !Visible;
-        WholeThing.SetActive(Visible);
-        Planet.SetActive(Visible);
-        yield return new WaitForSecondsRealtime(0.5f);
-        while (Background.transform.localPosition.y > -0.008)
-        {
-            Background.transform.localPosition -= new Vector3(0, 0.0025f, 0);
-            Background.transform.localScale -= new Vector3(0, 0.005f, 0);
-            yield return null;
-        }
-        Debug.LogFormat("<Uranus #{0}> Visible toggled to {1}.", moduleId, Visible);
-        yield return null;
+        yield return AnimationCoroutine.Animation(0.75f, d => 
+                    Background.localScale = new Vector3(1, Mathf.Lerp(1, 18, d), 1));
+        yield return new WaitForSeconds(0.25f);
+        visible = !visible;
+        WholeThing.SetActive(visible);
+        Planet.SetActive(visible);
+        yield return AnimationCoroutine.Animation(0.75f, d => 
+                    Background.localScale = new Vector3(1, Mathf.Lerp(18, 1, d), 1));
         isAnimating = false;
     }
 #pragma warning disable 414

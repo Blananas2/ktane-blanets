@@ -1,17 +1,15 @@
 fileFormatVersion: 2
-guid: 4b82134a35da6254ba4229923cbe9e79
+guid: fb5419e1c6aeddc419a1e8e5fa7d39f3
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
-    100002: group_0_16345508
     400000: //RootNode
-    400002: group_0_16345508
-    2100000: color_16345508
-    2100002: group_0_16345508Mat
-    2300000: group_0_16345508
-    3300000: group_0_16345508
-    4300000: group_0_16345508
+    2100000: Component_PuzzleBack_mat
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Component_PuzzleBackground1
+    9500000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -86,7 +84,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

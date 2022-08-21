@@ -22,7 +22,8 @@ public class NeptuneScript : MonoBehaviour { //depends on name
     public GameObject[] Coins;
     public GameObject Star;
 
-    bool Visible = true;
+    bool visible = true;
+    bool isAnimating;
     bool oddSN = false;
     int starSpeed = 0;
     int RNG = 0;
@@ -136,23 +137,19 @@ public class NeptuneScript : MonoBehaviour { //depends on name
     }
 
     private IEnumerator HidePlanet() {
-        for (int i = 0; i < 25; i++) {
-            yield return new WaitForSeconds(0.05f);
-            Background.transform.localScale += new Vector3(0f, 0.02f, 0f); //depends on size of the planet
-        }
-        Visible = !Visible;
+        if (isAnimating) yield break;
+        isAnimating = true;
+        yield return AnimationCoroutine.Animation(0.75f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 16, d), 1));
+        visible = !visible;
         if (!moduleSolved) {
-            Planet.SetActive(Visible);
-            StatStuff.SetActive(Visible);
+            Planet.SetActive(visible);
+            StatStuff.SetActive(visible);
         } else {
-            Star.SetActive(Visible);
+            Star.SetActive(visible);
         }
-        for (int i = 0; i < 25; i++) {
-            yield return new WaitForSeconds(0.05f);
-            Background.transform.localScale -= new Vector3(0f, 0.02f, 0f); //see above
-        }
-        Debug.LogFormat("<Neptune #{0}> Visible toggled to {1}.", moduleId, Visible);
-        yield return null;
+        yield return AnimationCoroutine.Animation(0.75f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(16, 1, d), 1));
+        Debug.LogFormat("<Neptune #{0}> Visible toggled to {1}.", moduleId, visible);
+        isAnimating = false;
     }
 
     void PlanetButtonPress(KMSelectable PlanetButton) {
@@ -287,14 +284,9 @@ public class NeptuneScript : MonoBehaviour { //depends on name
     }
 
     IEnumerator AnimateStar () {
-        var elapsed = 0f;
         Star.transform.localPosition = new Vector3(0f, 0.05f, -0.04f);
         Star.transform.localScale = new Vector3(0.02f, 0.02f, -0.02f);
-        while (elapsed < 4.128f) {
-            Star.transform.localEulerAngles = new Vector3(elapsed * 394, 90f, 90f);
-            yield return null;
-            elapsed += Time.deltaTime;
-        }
+        yield return AnimationCoroutine.Animation(4.128f, d => Star.transform.localEulerAngles = new Vector3(d * 4.128f * 394, 90, 90));
         Star.transform.localEulerAngles = new Vector3(180f, 90f, 90f);
         GetComponent<KMBombModule>().HandlePass();
         Debug.LogFormat("[Neptune #{0}] All enemies manipulated, module solved.", moduleId);

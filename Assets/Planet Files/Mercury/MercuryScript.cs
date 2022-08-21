@@ -22,7 +22,8 @@ public class MercuryScript : MonoBehaviour { //depends on name
     public Sprite[] PaperBalls;
     public Sprite Empty;
 
-    bool Visible = true;
+    bool visible = true;
+    bool isAnimating;
 
     int[] ballAmounts = { 0, 0, 0, 0, 0 };
     int[][] currentBalls = {
@@ -149,19 +150,15 @@ public class MercuryScript : MonoBehaviour { //depends on name
     }
 
     private IEnumerator HidePlanet() {
-        for (int i = 0; i < 25; i++) {
-            yield return new WaitForSeconds(0.05f);
-            Background.transform.localScale += new Vector3(0f, 0.01f, 0f); //depends on size of the planet
-        }
-        Visible = !Visible;
-        Planet.SetActive(Visible);
-        Pivot.SetActive(Visible);
-        for (int i = 0; i < 25; i++) {
-            yield return new WaitForSeconds(0.05f);
-            Background.transform.localScale -= new Vector3(0f, 0.01f, 0f); //see above
-        }
-        Debug.LogFormat("<Mercury #{0}> Visible toggled to {1}.", moduleId, Visible);
-        yield return null;
+        if (isAnimating) yield break;
+        isAnimating = true;
+        yield return AnimationCoroutine.Animation(0.5f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 12, d), 1));
+        visible = !visible;
+        Planet.SetActive(visible);
+        Pivot.SetActive(visible);
+        yield return AnimationCoroutine.Animation(0.5f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(12, 1, d), 1));
+        Debug.LogFormat("<Mercury #{0}> Visible toggled to {1}.", moduleId, visible);
+        isAnimating = false;
     }
 
     void TubePress(KMSelectable Tube) {

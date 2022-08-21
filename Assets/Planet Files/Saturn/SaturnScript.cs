@@ -34,7 +34,7 @@ public class SaturnScript : MonoBehaviour {
                                              "D", "DR", "UDL", "UD", "D", "RD", "LD", "D", "UD", "UD", "UD", "UD", "UD", "UD", "UD", "UD", "UD", "UD", "D", "RD", "LD", "D", "UD", "UD", "UD", "UD", "UD", "UD", "D", "RD", "LD", "RD", "LUD", "UD", "D", "RD", "LD", "D", "UD", "UD", "UD", "UDR", "LD", "D", "D", "RD", "LD", "D", "D", "RD", "LD", "RD", "LD", "D", "D", "D", "UD", "UDR", "LD", "D", "D", "RD", "LD", "D"
                                             };
 
-    bool Visible = true, CurrentOuter = true, EndOuter = true, Animating = false;
+    bool visible = true, CurrentOuter = true, EndOuter = true, isAnimating = false;
     int UpIndex, CurrentIndex, EndIndex;
 
     //Logging
@@ -49,7 +49,7 @@ public class SaturnScript : MonoBehaviour {
             PlanetButton.OnInteract += delegate () { PlanetButtonPress(PlanetButton); return false; };
         }
 
-        HideButton.OnInteract += delegate () { if (!Animating) StartCoroutine(HidePlanet()); return false; };
+        HideButton.OnInteract += delegate () { if (!isAnimating) StartCoroutine(HidePlanet()); return false; };
         CurrentPosButton.OnHighlight += delegate () { if (CurrentOuter) CoordsTexts[0].text = (9 - (CurrentIndex / 64)).ToString(); else CoordsTexts[0].text = (4 - (CurrentIndex / 64)).ToString(); CoordsTexts[1].text = (CurrentIndex % 64).ToString(); };
         CurrentPosButton.OnHighlightEnded += delegate () { CoordsTexts[0].text = string.Empty; CoordsTexts[1].text = string.Empty; };
         CurrentEndButton.OnHighlight += delegate () { if (EndOuter) CoordsTexts[0].text = (9 - (EndIndex / 64)).ToString(); else CoordsTexts[0].text = (4 - (EndIndex / 64)).ToString(); CoordsTexts[1].text = (EndIndex % 64).ToString(); };
@@ -91,34 +91,18 @@ public class SaturnScript : MonoBehaviour {
     }
 
     private IEnumerator HidePlanet() {
-        Animating = true;
-        float t = 0f;
-        if (Visible)
-        {
-            Visible = false;
-            while (Planet.transform.localScale.x > 0 && Planet.transform.localScale.y > 0 && Planet.transform.localScale.z > 0)
-            {
-                Planet.transform.localScale = Vector3.Lerp(new Vector3(0.14f, 0.14f, 0.14f), new Vector3(0f, 0f, 0f), t);
-                yield return null;
-                t += Time.deltaTime;
-            }
-        }
+        isAnimating = true;
+        if (visible)
+            yield return AnimationCoroutine.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0.14f, 0, d) * Vector3.one);
         else
-        {
-            while (Planet.transform.localScale.x < 0.14f && Planet.transform.localScale.y < 0.14f && Planet.transform.localScale.z < 0.14f)
-            {
-                Planet.transform.localScale = Vector3.Lerp(new Vector3(0f, 0f, 0f), new Vector3(0.14f, 0.14f, 0.14f), t);
-                yield return null;
-                t += Time.deltaTime;
-            }
-            Visible = true;
-        }
-        Debug.LogFormat("<Saturn #{0}> Visibility toggled to {1}.", moduleId, Visible);
-        Animating = false;
+            yield return AnimationCoroutine.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0, 0.14f, d) * Vector3.one);
+        visible = !visible;
+        Debug.LogFormat("<Saturn #{0}> Visibility toggled to {1}.", moduleId, visible);
+        isAnimating = false;
     }
 
     void PlanetButtonPress(KMSelectable PlanetButton) {
-        if (!Visible || moduleSolved) return;
+        if (!visible || moduleSolved) return;
         if (Array.IndexOf(PlanetButtons, PlanetButton) == 4)
         {
             if (CurrentOuter)
@@ -255,7 +239,7 @@ public class SaturnScript : MonoBehaviour {
         if (Regex.IsMatch(command, @"^\s*toggle\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            if (Animating)
+            if (isAnimating)
                 yield break;
             HideButton.OnInteract();
             yield break;
@@ -270,7 +254,7 @@ public class SaturnScript : MonoBehaviour {
                 if (parameters[1].EqualsIgnoreCase("green"))
                 {
                     yield return null;
-                    if (!Visible) yield break;
+                    if (!visible) yield break;
                     CurrentEndButton.OnHighlight();
                     yield return new WaitForSeconds(2f);
                     CurrentEndButton.OnHighlightEnded();
@@ -278,7 +262,7 @@ public class SaturnScript : MonoBehaviour {
                 else if (parameters[1].EqualsIgnoreCase("white"))
                 {
                     yield return null;
-                    if (!Visible) yield break;
+                    if (!visible) yield break;
                     CurrentPosButton.OnHighlight();
                     yield return new WaitForSeconds(2f);
                     CurrentPosButton.OnHighlightEnded();
@@ -307,7 +291,7 @@ public class SaturnScript : MonoBehaviour {
                     }
                 }
                 yield return null;
-                if (!Visible) yield break;
+                if (!visible) yield break;
                 for (int i = 0; i < uppedParam.Length; i++)
                 {
                     PlanetButtons[Array.IndexOf(valids, uppedParam[i])].OnInteract();

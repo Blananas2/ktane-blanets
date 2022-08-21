@@ -22,7 +22,8 @@ public class VenusScript : MonoBehaviour { //depends on name
     public GameObject LightBase;
     public Material[] ColorMats;
 
-    bool Visible = true;
+    bool visible = true;
+    bool isAnimating;
     bool Started = false;
     bool AllowedToRotate = true;
     bool Animating = false;
@@ -113,21 +114,17 @@ public class VenusScript : MonoBehaviour { //depends on name
     }
 
     private IEnumerator HidePlanet() {
-        for (int i = 0; i < 25; i++) {
-            yield return new WaitForSeconds(0.05f);
-            Background.transform.localScale += new Vector3(0f, 0.01f, 0f); //depends on size of the planet
-        }
-        Visible = !Visible;
-        Planet.SetActive(Visible);
+        if (isAnimating) yield break;
+        isAnimating = true;
+        yield return AnimationCoroutine.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 14, d), 1));
+        visible = !visible;
+        Planet.SetActive(visible);
         for (int i = 0; i < 4; i++) {
-            PBObjects[i].SetActive(Visible);
+            PBObjects[i].SetActive(visible);
         }
-        for (int i = 0; i < 25; i++) {
-            yield return new WaitForSeconds(0.05f);
-            Background.transform.localScale -= new Vector3(0f, 0.01f, 0f); //see above
-        }
-        Debug.LogFormat("<Venus #{0}> Visible toggled to {1}.", moduleId, Visible);
-        yield return null;
+        yield return AnimationCoroutine.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(14, 1, d), 1));
+        Debug.LogFormat("<Venus #{0}> Visible toggled to {1}.", moduleId, visible);
+        isAnimating = false;
     }
 
     void PlanetButtonPress(KMSelectable PlanetButton) {
