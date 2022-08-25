@@ -116,13 +116,13 @@ public class VenusScript : MonoBehaviour { //depends on name
     private IEnumerator HidePlanet() {
         if (isAnimating) yield break;
         isAnimating = true;
-        yield return AnimationCoroutine.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 14, d), 1));
+        yield return Ut.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 14, d), 1));
         visible = !visible;
         Planet.SetActive(visible);
         for (int i = 0; i < 4; i++) {
             PBObjects[i].SetActive(visible);
         }
-        yield return AnimationCoroutine.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(14, 1, d), 1));
+        yield return Ut.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(14, 1, d), 1));
         Debug.LogFormat("<Venus #{0}> Visible toggled to {1}.", moduleId, visible);
         isAnimating = false;
     }

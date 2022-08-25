@@ -210,10 +210,10 @@ public class EarthScript : MonoBehaviour { //depends on name
     private IEnumerator HidePlanet() {
         if (isAnimating) yield break;
         isAnimating = true;
-        yield return AnimationCoroutine.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 15, d), 1));
+        yield return Ut.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 15, d), 1));
         visible = !visible;
         Planet.SetActive(visible);
-        yield return AnimationCoroutine.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(15, 1, d), 1));
+        yield return Ut.Animation(0.7f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(15, 1, d), 1));
         Debug.LogFormat("<Earth #{0}> Visible toggled to {1}.", moduleId, visible);
         isAnimating = false;
     }

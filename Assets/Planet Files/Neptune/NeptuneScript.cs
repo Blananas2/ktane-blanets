@@ -139,7 +139,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
     private IEnumerator HidePlanet() {
         if (isAnimating) yield break;
         isAnimating = true;
-        yield return AnimationCoroutine.Animation(0.75f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 16, d), 1));
+        yield return Ut.Animation(0.75f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 16, d), 1));
         visible = !visible;
         if (!moduleSolved) {
             Planet.SetActive(visible);
@@ -147,7 +147,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
         } else {
             Star.SetActive(visible);
         }
-        yield return AnimationCoroutine.Animation(0.75f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(16, 1, d), 1));
+        yield return Ut.Animation(0.75f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(16, 1, d), 1));
         Debug.LogFormat("<Neptune #{0}> Visible toggled to {1}.", moduleId, visible);
         isAnimating = false;
     }
@@ -286,7 +286,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
     IEnumerator AnimateStar () {
         Star.transform.localPosition = new Vector3(0f, 0.05f, -0.04f);
         Star.transform.localScale = new Vector3(0.02f, 0.02f, -0.02f);
-        yield return AnimationCoroutine.Animation(4.128f, d => Star.transform.localEulerAngles = new Vector3(d * 4.128f * 394, 90, 90));
+        yield return Ut.Animation(4.128f, d => Star.transform.localEulerAngles = new Vector3(d * 4.128f * 394, 90, 90));
         Star.transform.localEulerAngles = new Vector3(180f, 90f, 90f);
         GetComponent<KMBombModule>().HandlePass();
         Debug.LogFormat("[Neptune #{0}] All enemies manipulated, module solved.", moduleId);

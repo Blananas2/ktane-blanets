@@ -297,12 +297,12 @@ public class PlutoScript : MonoBehaviour { //depends on name
     private IEnumerator HidePlanet() {
         if (!moduleSolved && !isAnimating) {
             isAnimating = true;
-            yield return AnimationCoroutine.Animation(0.5f, d => Background.transform.transform.transform.transform.transform.transform.transform.localScale = new Vector3(1, Mathf.Lerp(1, 10, d), 1));
+            yield return Ut.Animation(0.5f, d => Background.transform.transform.transform.transform.transform.transform.transform.localScale = new Vector3(1, Mathf.Lerp(1, 10, d), 1));
             visible = !visible;
             if (theGoblinsWereAwakened)
                 AsteroidsObj.SetActive(visible);
             Planet.SetActive(visible);
-            yield return AnimationCoroutine.Animation(0.5f, d => Background.transform.transform.transform.transform.transform.transform.transform.transform.localScale = new Vector3(1, Mathf.Lerp(10, 1, d), 1));
+            yield return Ut.Animation(0.5f, d => Background.transform.transform.transform.transform.transform.transform.transform.transform.localScale = new Vector3(1, Mathf.Lerp(10, 1, d), 1));
             Debug.LogFormat("<Pluto #{0}> Visible toggled to {1}.", moduleId, visible);
             isAnimating = false;
         }

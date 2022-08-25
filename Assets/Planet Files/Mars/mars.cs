@@ -199,12 +199,12 @@ public class mars : MonoBehaviour
     {
         if (isAnimating) yield break;
         isAnimating = true;
-        yield return AnimationCoroutine.Animation(0.5f, d => background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 12, d), 1));
+        yield return Ut.Animation(0.5f, d => background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 12, d), 1));
         visible = !visible;
         planet.SetActive(visible);
         planetButton.gameObject.SetActive(visible);
         yield return new WaitForSecondsRealtime(0.25f);
-        yield return AnimationCoroutine.Animation(0.5f, d => background.transform.localScale = new Vector3(1, Mathf.Lerp(12, 1, d), 1));
+        yield return Ut.Animation(0.5f, d => background.transform.localScale = new Vector3(1, Mathf.Lerp(12, 1, d), 1));
         Debug.LogFormat("<Mars #{0}> Visible toggled to {1}.", moduleId, visible);
         isAnimating = false;
     }

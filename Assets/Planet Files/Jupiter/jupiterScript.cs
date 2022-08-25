@@ -470,9 +470,9 @@ public class jupiterScript : MonoBehaviour {
 		if (isAnimating) yield break;
 		isAnimating = true;
 		if (visible)
-			yield return AnimationCoroutine.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0.15f, 0, d) * Vector3.one);
+			yield return Ut.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0.15f, 0, d) * Vector3.one);
 		else
-			yield return AnimationCoroutine.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0, 0.15f, d) * Vector3.one);
+			yield return Ut.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0, 0.15f, d) * Vector3.one);
 		visible = !visible;
 		Debug.LogFormat("<Jupiter #{0}> Visibility toggled to {1}.", moduleId, visible);
 		isAnimating = false;

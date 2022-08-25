@@ -229,13 +229,13 @@ public class UranusModuleScript : MonoBehaviour
     {
         if (isAnimating) yield break;
         isAnimating = true;
-        yield return AnimationCoroutine.Animation(0.75f, d => 
+        yield return Ut.Animation(0.75f, d => 
                     Background.localScale = new Vector3(1, Mathf.Lerp(1, 18, d), 1));
         yield return new WaitForSeconds(0.25f);
         visible = !visible;
         WholeThing.SetActive(visible);
         Planet.SetActive(visible);
-        yield return AnimationCoroutine.Animation(0.75f, d => 
+        yield return Ut.Animation(0.75f, d => 
                     Background.localScale = new Vector3(1, Mathf.Lerp(18, 1, d), 1));
         isAnimating = false;
     }

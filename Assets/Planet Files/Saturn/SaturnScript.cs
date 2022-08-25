@@ -93,9 +93,9 @@ public class SaturnScript : MonoBehaviour {
     private IEnumerator HidePlanet() {
         isAnimating = true;
         if (visible)
-            yield return AnimationCoroutine.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0.14f, 0, d) * Vector3.one);
+            yield return Ut.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0.14f, 0, d) * Vector3.one);
         else
-            yield return AnimationCoroutine.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0, 0.14f, d) * Vector3.one);
+            yield return Ut.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0, 0.14f, d) * Vector3.one);
         visible = !visible;
         Debug.LogFormat("<Saturn #{0}> Visibility toggled to {1}.", moduleId, visible);
         isAnimating = false;
