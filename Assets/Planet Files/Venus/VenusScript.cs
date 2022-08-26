@@ -281,6 +281,12 @@ public class VenusScript : MonoBehaviour { //depends on name
     }
     IEnumerator TwitchHandleForcedSolve()
     {
+        if (!visible)
+        {
+            HideButton.OnInteract();
+            while (isAnimating)
+                yield return true;
+        }
         if (!Started)
             yield return Ut.Press(PlanetButtons[0], 0.2f);
         foreach (char ch in FindPath(current, end))
