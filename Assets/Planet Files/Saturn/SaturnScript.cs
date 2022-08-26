@@ -7,7 +7,8 @@ using UnityEngine;
 
 public class SaturnScript : MonoBehaviour
 {
-
+    const int MIN_PATH_LENGTH = 10;
+    const int MAX_PATH_LENGTH = 30;
     public KMBombInfo Bomb;
     public KMAudio Audio;
 
@@ -67,12 +68,16 @@ public class SaturnScript : MonoBehaviour
         StartCoroutine(PlanetRotation());
         UpIndex = UnityEngine.Random.Range(0, 4);
         InnerSpheres[UpIndex].material = Brown;
-        CurrentIndex = UnityEngine.Random.Range(0, OuterMazeWalls.Length);
-        EndIndex = UnityEngine.Random.Range(0, OuterMazeWalls.Length);
-        if (UnityEngine.Random.Range(0, 2) == 0) CurrentOuter = false;
+        string path;
+
         if (UnityEngine.Random.Range(0, 2) == 0) EndOuter = false;
-        while (EndIndex == CurrentIndex && CurrentOuter == EndOuter)
+        if (UnityEngine.Random.Range(0, 2) == 0) CurrentOuter = false;
+        EndIndex = UnityEngine.Random.Range(0, OuterMazeWalls.Length);
+
+        do {
             CurrentIndex = UnityEngine.Random.Range(0, OuterMazeWalls.Length);
+            path = FindPath(new MazeCell(CurrentIndex, CurrentOuter), new MazeCell(EndIndex, EndOuter));
+        } while (path.Length < MIN_PATH_LENGTH || path.Length > MAX_PATH_LENGTH);
         int keyCur = 9;
         int keyEnd = 9;
         if (!CurrentOuter)
@@ -83,8 +88,9 @@ public class SaturnScript : MonoBehaviour
         PositionPlanetsRotators[0].transform.localEulerAngles = new Vector3(0, (float)(UpIndex * 90 + (CurrentIndex % 64 * 5.625)), 0);
         PositionPlanets[1].transform.localPosition = new Vector3(0, 0, ZValues[keyEnd - (EndIndex / 64)]);
         PositionPlanetsRotators[1].transform.localEulerAngles = new Vector3(0, (float)(UpIndex * 90 + (EndIndex % 64 * 5.625)), 0);
-        Debug.LogFormat("[Saturn #{0}] Your starting position is {1}.", moduleId, "(" + (keyCur - (CurrentIndex / 64)) + " up, " + (CurrentIndex % 64) + " right)");
-        Debug.LogFormat("[Saturn #{0}] The end destination is {1}.", moduleId, "(" + (keyEnd - (EndIndex / 64)) + " up, " + (EndIndex % 64) + " right)");
+        Debug.LogFormat("[Saturn #{0}] Your starting position is ({1} up, {2} right)", moduleId, keyCur - (CurrentIndex / 64), CurrentIndex % 64);
+        Debug.LogFormat("[Saturn #{0}] The end destination is ({1} up, {2} right).", moduleId, keyEnd - (EndIndex / 64), EndIndex % 64);
+        Debug.LogFormat("[Saturn #{0}] The shortest possible path is: {1}.", moduleId, path);
     }
 
     private IEnumerator PlanetRotation()
