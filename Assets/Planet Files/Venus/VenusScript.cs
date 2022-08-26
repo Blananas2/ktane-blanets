@@ -264,7 +264,6 @@ public class VenusScript : MonoBehaviour { //depends on name
         else if (command == "START" && visible)
         {
             yield return null;
-            Debug.LogFormat("wero");
             if (Started)
                 yield return "sendtochaterror DARK VENUS!!!!!!! is already entered :(";
             else PlanetButtons[0].OnInteract();
