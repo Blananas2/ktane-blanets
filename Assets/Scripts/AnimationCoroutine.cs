@@ -9,9 +9,9 @@ public static class Ut {
         float delta = 0;
         while (delta < 1)
         {
-            delta += Time.deltaTime;
-            action(delta);
             yield return null;
+            delta += Time.deltaTime / duration;
+            action(delta);
         }
     }
     public static IEnumerator Press(KMSelectable btn, float delay)

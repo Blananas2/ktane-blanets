@@ -152,11 +152,11 @@ public class MercuryScript : MonoBehaviour { //depends on name
     private IEnumerator HidePlanet() {
         if (isAnimating) yield break;
         isAnimating = true;
-        yield return Ut.Animation(0.5f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 12, d), 1));
+        yield return Ut.Animation(0.75f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 12, d), 1));
         visible = !visible;
         Planet.SetActive(visible);
         Pivot.SetActive(visible);
-        yield return Ut.Animation(0.5f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(12, 1, d), 1));
+        yield return Ut.Animation(0.75f, d => Background.transform.localScale = new Vector3(1, Mathf.Lerp(12, 1, d), 1));
         Debug.LogFormat("<Mercury #{0}> Visible toggled to {1}.", moduleId, visible);
         isAnimating = false;
     }

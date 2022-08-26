@@ -51,12 +51,13 @@ public class UranusModuleScript : MonoBehaviour
     string[] directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
     string[] directionNames = { "North", "Northeast", "East", "Southeast", "South", "Southwest", "West", "Northwest" };
     Vector3[] axes = { new Vector3(1, 0, 0), new Vector3(1, -1, 0), new Vector3(0, -1, 0), new Vector3(-1, -1, 0), new Vector3(-1, 0, 0), new Vector3(-1, 1, 0), new Vector3(0, 1, 0), new Vector3(1, 1, 0) };
+    private int startingPosition;
     int currentPosition;
     int targetValue = 0;
     int currentValue = 0;
     int moveCounter = 0;
     int previousCell = -1;
-    private bool visible;
+    private bool visible = true;
 
     void Awake()
     {
@@ -81,7 +82,8 @@ public class UranusModuleScript : MonoBehaviour
     {
         if (UnityEngine.Random.Range(0, 200) == 173) Planet.GetComponent<MeshRenderer>().material = SphereColors[6];
         CalculateTarget();
-        currentPosition = UnityEngine.Random.Range(0, 50);
+        startingPosition = UnityEngine.Random.Range(0, 50);
+        currentPosition = startingPosition;
         Debug.LogFormat("[Uranus #{0}] Your starting coordinate is column {1}, row {2}", moduleId, currentPosition % 10 + 1, currentPosition / 10 + 1);
         GetColors();
         StartCoroutine(PlanetRotation());
@@ -235,6 +237,11 @@ public class UranusModuleScript : MonoBehaviour
         visible = !visible;
         WholeThing.SetActive(visible);
         Planet.SetActive(visible);
+
+        currentPosition = startingPosition;
+        currentValue = 0;
+        previousCell = -1;
+
         yield return Ut.Animation(0.75f, d => 
                     Background.localScale = new Vector3(1, Mathf.Lerp(18, 1, d), 1));
         isAnimating = false;
