@@ -353,9 +353,8 @@ public class mars : MonoBehaviour
                 yield break;
             }
             yield return null;
-            planetButton.OnInteract();
-            yield return new WaitForSeconds(.5f);
-            planetButton.OnInteract();
+            yield return Ut.Press(planetButton, 0.5f);
+            yield return Ut.Press(planetButton, 0);
         }
         else if (input == "no")
         {
@@ -365,8 +364,7 @@ public class mars : MonoBehaviour
                 yield break;
             }
             yield return null;
-            planetButton.OnInteract();
-            yield return new WaitForSeconds(1f);
+            yield return Ut.Press(planetButton, 1);
         }
         else if (input == "cancel")
         {
@@ -377,22 +375,23 @@ public class mars : MonoBehaviour
             }
             yield return null;
             for (int i = 0; i < 3; i++)
-            {
-                planetButton.OnInteract();
-                yield return new WaitForSeconds(.2f);
-            }
+                yield return Ut.Press(planetButton, 0.2f);
         }
         else if (input == "hide")
         {
             yield return null;
             hideButton.OnInteract();
         }
-        else
-            yield break;
     }
 
     private IEnumerator TwitchHandleForcedSolve()
     {
+        if (!visible)
+        {
+            hideButton.OnInteract();
+            while (isAnimating)
+                yield return true;
+        }
         if (timesPressed == 1)
         {
             if (modulePresent)
@@ -413,19 +412,12 @@ public class mars : MonoBehaviour
         yield return new WaitUntil(() => timesPressed == 0);
         if (moduleSolved)
             yield break;
-        planetButton.OnInteract();
-        yield return new WaitForSeconds(.2f);
-        planetButton.OnInteract();
+        yield return Ut.Press(planetButton, .2f);
+        yield return Ut.Press(planetButton, .2f);
         if (modulePresent)
-        {
-            yield return new WaitForSeconds(.2f);
-            planetButton.OnInteract();
-        }
+            yield return Ut.Press(planetButton, .2f);
         while (!moduleSolved)
-        {
             yield return true;
-            yield return null;
-        }
     }
 
 }
