@@ -20,6 +20,7 @@ public class SaturnScript : MonoBehaviour {
     public Material Brown;
     public TextMesh[] CoordsTexts;
 
+    const string dirs = "URDLFB";
     float[] ZValues = new float[] { 0.67f, 0.70722222222f, 0.74444444444f, 0.78166666666f, 0.81888888888f, 0.85611111111f, 0.89333333333f, 0.93055555555f, 0.96777777777f, 1.005f };
     string[] OuterMazeWalls = new string[] { "UD", "UD", "UD", "U", "UD", "UD", "UR", "LU", "UDR", "LU", "UD", "UD", "UD", "UD", "U", "UD", "UR", "LUD", "UD", "UD", "UD", "UD", "UD", "UD", "UR", "ULD", "U", "UR", "LUR", "LU", "UD", "UD", "UR", "LU", "UD", "UD", "UR", "ULD", "U", "UD", "UD", "UR", "LU", "U", "UD", "UR", "LU", "UD", "UD", "UR", "LU", "UD", "UD", "UD", "UD", "UD", "UD", "UR", "LUD", "UD", "U", "UD", "UR", "LU",
                                              "LU", "U", "UD", "DR", "LUR", "LU", "DR", "L", "UD", "RD", "LU", "UR", "LU", "UD", "R", "LU", "DR", "LU", "UD", "UD", "UD", "UR", "LUR", "LU", "RD", "LU", "RD", "LR", "LD", "RD", "LU", "UD", "DR", "LR", "LU", "UR", "LD", "UD", "RD", "LUR", "LU", "RD", "LR", "LD", "UR", "LR", "LD", "UD", "UD", "LR", "LD", "UD", "UR", "LU", "UR", "LUD", "UD", "D", "UR", "LU", "R", "LUD", "RD", "LR",
@@ -232,74 +233,34 @@ public class SaturnScript : MonoBehaviour {
 
     //twitch plays
     #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} hover <white/green> [Hovers over the sphere with the specified color] | !{0} press <U/D/L/R/F/B> [Presses the specified sphere (U=Up, D=Down, L=Left, R=Right, F=Front, B=Back)] | !{0} toggle [Toggles planet visibility] | Presses can be chained, for ex: !{0} press UURBL";
+    private readonly string TwitchHelpMessage = @"!{0} hover <white/green> [Hovers over the sphere with the specified color] | !{0} move <U/D/L/R/F/B> [Presses the specified sphere (U=Up, D=Down, L=Left, R=Right, F=Front, B=Back)] | !{0} toggle [Toggles planet visibility] | Presses can be chained, for ex: !{0} press UURBL";
     #pragma warning restore 414
     IEnumerator ProcessTwitchCommand(string command)
     {
-        if (Regex.IsMatch(command, @"^\s*toggle\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        command = command.Trim().ToUpperInvariant();
+        Match mHover = Regex.Match(command, @"^HOVER\s+(W(?:HITE)|G(?:REEN))$");
+        Match mMove = Regex.Match(command, @"^(?:(?:MOVE|PRESS)\s+)?((?:[URDLFB][\s,;]*)+)$");
+        if (command == "TOGGLE" || command == "HIDE")
         {
             yield return null;
-            if (isAnimating)
-                yield break;
             HideButton.OnInteract();
-            yield break;
         }
-        string[] parameters = command.Split(' ');
-        if (Regex.IsMatch(parameters[0], @"^\s*hover\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-        {
-            if (parameters.Length > 2)
-                yield return "sendtochaterror Too many parameters!";
-            else if (parameters.Length == 2)
-            {
-                if (parameters[1].EqualsIgnoreCase("green"))
-                {
-                    yield return null;
-                    if (!visible) yield break;
-                    CurrentEndButton.OnHighlight();
-                    yield return new WaitForSeconds(2f);
-                    CurrentEndButton.OnHighlightEnded();
-                }
-                else if (parameters[1].EqualsIgnoreCase("white"))
-                {
-                    yield return null;
-                    if (!visible) yield break;
-                    CurrentPosButton.OnHighlight();
-                    yield return new WaitForSeconds(2f);
-                    CurrentPosButton.OnHighlightEnded();
-                }
-                else
-                    yield return "sendtochaterror!f The specified color '" + parameters[1] + "' is invalid!";
-            }
-            else if (parameters.Length == 1)
-                yield return "sendtochaterror Please specify a sphere to press!";
+        if (!visible)
             yield break;
-        }
-        if (Regex.IsMatch(parameters[0], @"^\s*press\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        if (mHover.Success)
         {
-            if (parameters.Length > 2)
-                yield return "sendtochaterror Too many parameters!";
-            else if (parameters.Length == 2)
-            {
-                string uppedParam = parameters[1].ToUpper();
-                char[] valids = { 'D', 'R', 'U', 'L', 'F', 'B' };
-                for (int i = 0; i < uppedParam.Length; i++)
-                {
-                    if (!valids.Contains(uppedParam[i]))
-                    {
-                        yield return "sendtochaterror!f The specified sphere '" + parameters[1] + "' is invalid!";
-                        yield break;
-                    }
-                }
-                yield return null;
-                if (!visible) yield break;
-                for (int i = 0; i < uppedParam.Length; i++)
-                {
-                    PlanetButtons[Array.IndexOf(valids, uppedParam[i])].OnInteract();
-                    yield return new WaitForSeconds(.1f);
-                }
-            }
-            else if (parameters.Length == 1)
-                yield return "sendtochaterror Please specify a sphere to press!";
+            yield return null;
+            KMSelectable hover = mHover.Groups[1].Value[0] == 'W' ? CurrentPosButton : CurrentEndButton;
+            hover.OnHighlight();
+            yield return new WaitForSeconds(2);
+            hover.OnHighlightEnded();
+        }
+        else if (mMove.Success)
+        {
+            yield return null;
+            char[] btns = mMove.Groups[1].Value.Where(ch => "URDLFB".Contains(ch)).ToArray();
+            foreach (char btn in btns)
+                yield return Ut.Press(PlanetButtons["URDLFB".IndexOf(btn)], 0.2f);
         }
     }
 }
