@@ -124,6 +124,7 @@ public class EarthScript : MonoBehaviour { //depends on name
         new int[] {7, 8, 44},
     };
     private List<string> placeNames = new List<string> {"China", "India", "United States", "Indonesia", "Brazil", "Nigeria", "Russia", "Mexico", "Japan", "Uganda", "Egypt", "Vietnam", "DR Congo", "Iran", "Turkey", "Germany", "United Kingdom", "Thailand", "South Africa", "Italy", "South Korea", "Colombia", "Argentina", "Algeria", "Ukraine", "Canada", "Morocco", "Uzbekistan", "Saudi Arabia", "Peru", "Afghanistan", "Malaysia", "Mozambique", "Venezuela", "Ivory Coast", "Madagascar", "Australia", "Sri Lanka", "Chile", "Kazakstan", "Guatemala", "Chad", "Bolivia", "Cuba", "Papua New Guinea", "Greenland", "Antarctica", "New Zealand"};
+    private string[] abbrs = new[] { "CN", "IN", "US", "ID", "BR", "NG", "RU", "MX", "JP", "UG", "EG", "VN", "CD", "IR", "TR", "DE", "GB", "TH", "ZA", "IT", "KR", "CO", "AR", "DZ", "UA", "CA", "MA", "UZ", "SA", "PE", "AF", "MY", "MZ", "VE", "CI", "MG", "AU", "LK", "CL", "KZ", "GT", "TD", "BO", "CU", "PG", "GL", "AQ", "NZ" };
     private List<int> primes = new List<int> {2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271};
 
     int startingTri = -1;
@@ -153,13 +154,9 @@ public class EarthScript : MonoBehaviour { //depends on name
         startingTri = UnityEngine.Random.Range(0, tris.Length);
         currentTri = startingTri;
 
-        endingTri = UnityEngine.Random.Range(0, tris.Length);
 
-        while (tris[startingTri][0] == tris[endingTri][0] || tris[startingTri][0] == tris[endingTri][1] || tris[startingTri][0] == tris[endingTri][2] ||
-               tris[startingTri][1] == tris[endingTri][0] || tris[startingTri][1] == tris[endingTri][1] || tris[startingTri][1] == tris[endingTri][2] ||
-               tris[startingTri][2] == tris[endingTri][0] || tris[startingTri][2] == tris[endingTri][1] || tris[startingTri][2] == tris[endingTri][2]) {
-            endingTri = UnityEngine.Random.Range(0, tris.Length);
-        }
+        do endingTri = UnityEngine.Random.Range(0, tris.Length);
+        while (FindPath(startingTri, endingTri).Count < 3);
 
         Debug.LogFormat("[Earth #{0}] Starting tri is {1}, {2}, {3}", moduleId, placeNames[tris[startingTri][0]], placeNames[tris[startingTri][1]], placeNames[tris[startingTri][2]]);
         Debug.LogFormat("[Earth #{0}] Ending tri is {1}, {2}, {3}", moduleId, placeNames[tris[endingTri][0]], placeNames[tris[endingTri][1]], placeNames[tris[endingTri][2]]);
@@ -266,6 +263,116 @@ public class EarthScript : MonoBehaviour { //depends on name
         }
 
         return match;
+    }
+
+    List<TriTuple> GetAdjacents(int triIx)
+    {
+        List<TriTuple> rtn = new List<TriTuple>(3);
+        int[] thisTri = tris[triIx];
+        for (int i = 0; i < tris.Length; i++)
+        {
+            int[] thatTri = tris[i];
+            if (i != triIx && (
+                (thatTri.Contains(thisTri[0]) && thatTri.Contains(thisTri[1])) ||
+                (thatTri.Contains(thisTri[1]) && thatTri.Contains(thisTri[2])) ||
+                (thatTri.Contains(thisTri[0]) && thatTri.Contains(thisTri[2]))))
+            {
+                rtn.Add(new TriTuple { triIx = i, move = thatTri.Single(x => !thisTri.Contains(x))});
+            }
+        }
+        return rtn;
+    }
+    List<int> FindPath(int start, int end)
+    {
+        if (start == end)
+            return new List<int>();
+        Queue<int> q = new Queue<int>();
+        List<Movement> allMoves = new List<Movement>();
+        HashSet<int> visitedTris = new HashSet<int>();
+
+        q.Enqueue(start);
+        while (q.Count > 0)
+        {
+            int cur = q.Dequeue();
+            foreach (TriTuple adj in GetAdjacents(cur))
+            {
+                if (visitedTris.Add(adj.triIx))
+                {
+                    q.Enqueue(adj.triIx);
+                    allMoves.Add(new Movement { start = cur, end = adj.triIx, pressed = adj.move });
+                }
+            }
+            if (cur == end)
+            {
+                Debug.Log("Found end!");
+                break;
+            }
+        }
+        Debug.LogFormat("{0} -> {1}", start, end);
+        Movement lastMove = allMoves.First(x => x.end == end);
+        List<Movement> path = new List<Movement>() { lastMove };
+        while (lastMove.start != start)
+        {
+            lastMove = allMoves.First(x => x.end == lastMove.start);
+            path.Add(lastMove);
+        }
+        path.Reverse();
+        Debug.Log(path.Select(x => x.pressed).Join());
+        return path.Select(x => x.pressed).ToList();
+    }
+    class TriTuple
+    {
+        public int triIx;
+        public int move;
+    }
+    class Movement
+    {
+        public int start;
+        public int end;
+        public int pressed;
+    }
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"Use <!{0} US MX CA> to press the spheres corresponding to the US, Mexico, and Canada. Hover over circles in the TP manual for this to see their country codes. Use <!{0} hide> to hide the planet.";
+#pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        command = command.Trim().ToUpperInvariant();
+        Match m = Regex.Match(command, @"^(?:(?:MOVE|PRESS)\s+)?((?:[A-Z][A-Z](?:\s+|$))+)$");
+        if (command == "HIDE")
+        {
+            yield return null;
+            HideButton.OnInteract();
+        }
+        else if (m.Success && visible)
+        {
+            string[] parameters = m.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string pm in parameters)
+            {
+                if (!abbrs.Contains(pm))
+                {
+                    yield return "sendtochaterror Unrecognized country code: " + pm;
+                    yield break;
+                }
+            }
+            yield return null;
+            foreach (string abbr in parameters)
+            {
+                yield return Ut.Press(PlanetButtons[Array.IndexOf(abbrs, abbr)], 0.3f);
+            }
+        }
+    }
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (!visible)
+        {
+            HideButton.OnInteract();
+            HideButton.OnInteractEnded();
+            while (isAnimating)
+                yield return true;
+        }
+        foreach (int sphere in FindPath(currentTri, endingTri))
+            yield return Ut.Press(PlanetButtons[sphere], 0.3f);
     }
 
 }
