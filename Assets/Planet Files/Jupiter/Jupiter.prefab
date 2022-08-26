@@ -635,6 +635,7 @@ MonoBehaviour:
   HideButton: {fileID: 114619631916584806}
   Planet: {fileID: 1876663907556358}
   Jupiter: {fileID: 114977675112177516}
+  sl: {fileID: 114907837735438752}
   Background: {fileID: 1020103096184710}
   StatusLightPosition: {fileID: 1283567413230246}
 --- !u!114 &114335356435126844

@@ -20,6 +20,7 @@ public class jupiterScript : MonoBehaviour {
     public KMSelectable HideButton;
     public GameObject Planet;
 	public KMSelectable Jupiter;
+	public KMStatusLightParent sl;
     public GameObject Background;
 	public GameObject StatusLightPosition;
 
@@ -68,6 +69,7 @@ public class jupiterScript : MonoBehaviour {
         }
 
 		BeginCalculation();
+		sl.transform.rotation = Quaternion.identity;
     }
 
 	void BeginCalculation () {
@@ -477,5 +479,44 @@ public class jupiterScript : MonoBehaviour {
 		Debug.LogFormat("<Jupiter #{0}> Visibility toggled to {1}.", moduleId, visible);
 		isAnimating = false;
 	}
+#pragma warning disable 414
+	private readonly string TwitchHelpMessage = @"Use <!{0} press/submit #> to press the planet when the last timer digit is #. Use <!{0} hide> to hide the planet.";
+#pragma warning restore 414
 
+	IEnumerator ProcessTwitchCommand(string command)
+	{
+		command = command.Trim().ToUpperInvariant();
+		Match m = Regex.Match(command, @"^(?:(?:MOVE|PRESS)\s+)?[0-9]$");
+		if (command == "HIDE")
+		{
+			yield return null;
+			HideButton.OnInteract();
+		}
+		if (m.Success)
+        {
+			yield return null;
+			while ((int)Bomb.GetTime() % 10 != (command.Last() - '0'))
+				yield return "trycancel The planet was not pressed because the command was canceled. Cancel culture strikes again...";
+			Jupiter.OnInteract();
+        }
+	}
+	IEnumerator TwitchHandleForcedSolve()
+	{
+		if (!visible)
+		{
+			HideButton.OnInteract();
+			HideButton.OnInteractEnded();
+			while (isAnimating)
+				yield return true;
+		}
+		if (Unicorn)
+			Jupiter.OnInteract();
+        else
+        {
+			while ((int)Bomb.GetTime() % 10 != CurrentNumber % 10)
+				yield return true;
+			Jupiter.OnInteract();
+        }
+
+	}
 }
