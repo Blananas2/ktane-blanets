@@ -45,6 +45,7 @@ public class SaturnScript : MonoBehaviour
     static int moduleIdCounter = 1;
     int moduleId;
     private bool moduleSolved;
+    private bool TwitchPlaysActive;
 
     void Awake()
     {
@@ -245,6 +246,8 @@ public class SaturnScript : MonoBehaviour
             moduleSolved = true;
             PositionPlanets[0].SetActive(false);
             GetComponent<KMBombModule>().HandlePass();
+            if (TwitchPlaysActive)
+                StartCoroutine(HidePlanet());
             Debug.LogFormat("[Saturn #{0}] End destination reached, module solved.", moduleId);
             Audio.PlaySoundAtTransform("saber", transform);
         }
