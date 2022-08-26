@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class SaturnScript : MonoBehaviour {
+public class SaturnScript : MonoBehaviour
+{
 
     public KMBombInfo Bomb;
     public KMAudio Audio;
@@ -43,10 +45,12 @@ public class SaturnScript : MonoBehaviour {
     int moduleId;
     private bool moduleSolved;
 
-    void Awake () {
+    void Awake()
+    {
         moduleId = moduleIdCounter++;
 
-        foreach (KMSelectable PlanetButton in PlanetButtons) {
+        foreach (KMSelectable PlanetButton in PlanetButtons)
+        {
             PlanetButton.OnInteract += delegate () { PlanetButtonPress(PlanetButton); return false; };
         }
 
@@ -58,7 +62,8 @@ public class SaturnScript : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         StartCoroutine(PlanetRotation());
         UpIndex = UnityEngine.Random.Range(0, 4);
         InnerSpheres[UpIndex].material = Brown;
@@ -82,16 +87,19 @@ public class SaturnScript : MonoBehaviour {
         Debug.LogFormat("[Saturn #{0}] The end destination is {1}.", moduleId, "(" + (keyEnd - (EndIndex / 64)) + " up, " + (EndIndex % 64) + " right)");
     }
 
-    private IEnumerator PlanetRotation() {
+    private IEnumerator PlanetRotation()
+    {
         var elapsed = 0f;
-        while (true) {
+        while (true)
+        {
             Planet.transform.localEulerAngles = new Vector3(0f, elapsed / 706 * 360, 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
     }
 
-    private IEnumerator HidePlanet() {
+    private IEnumerator HidePlanet()
+    {
         isAnimating = true;
         if (visible)
             yield return Ut.Animation(1, d => Planet.transform.localScale = Mathf.Lerp(0.14f, 0, d) * Vector3.one);
@@ -102,7 +110,8 @@ public class SaturnScript : MonoBehaviour {
         isAnimating = false;
     }
 
-    void PlanetButtonPress(KMSelectable PlanetButton) {
+    void PlanetButtonPress(KMSelectable PlanetButton)
+    {
         if (!visible || moduleSolved) return;
         if (Array.IndexOf(PlanetButtons, PlanetButton) == 4)
         {
@@ -168,7 +177,8 @@ public class SaturnScript : MonoBehaviour {
                         Debug.LogFormat("[Saturn #{0}] Hit a wall by going right at {1}, strike.", moduleId, "(" + (4 - (CurrentIndex / 64)) + " up, " + (CurrentIndex % 64) + " right)");
                         return;
                     }
-                    else if (CurrentIndex % 64 == 63) {
+                    else if (CurrentIndex % 64 == 63)
+                    {
                         CurrentIndex -= 63;
                         Audio.PlaySoundAtTransform("light", transform);
                     }
@@ -190,11 +200,12 @@ public class SaturnScript : MonoBehaviour {
                         Debug.LogFormat("[Saturn #{0}] Hit a wall by going down at {1}, strike.", moduleId, "(" + (4 - (CurrentIndex / 64)) + " up, " + (CurrentIndex % 64) + " right)");
                         return;
                     }
-                    else {
+                    else
+                    {
                         CurrentIndex += 64;
-                    PositionPlanets[0].transform.localPosition = new Vector3(0, 0, ZValues[(CurrentOuter ? 9 : 4) - (CurrentIndex / 64)]);
-                    Audio.PlaySoundAtTransform("light", transform);
-                    break;
+                        PositionPlanets[0].transform.localPosition = new Vector3(0, 0, ZValues[(CurrentOuter ? 9 : 4) - (CurrentIndex / 64)]);
+                        Audio.PlaySoundAtTransform("light", transform);
+                        break;
                     }
                 default:
                     if (CurrentOuter && OuterMazeWalls[CurrentIndex].Contains("L"))
@@ -209,14 +220,16 @@ public class SaturnScript : MonoBehaviour {
                         Debug.LogFormat("[Saturn #{0}] Hit a wall by going left at {1}, strike.", moduleId, "(" + (4 - (CurrentIndex / 64)) + " up, " + (CurrentIndex % 64) + " right)");
                         return;
                     }
-                    else if (CurrentIndex % 64 == 0) {
+                    else if (CurrentIndex % 64 == 0)
+                    {
                         CurrentIndex += 63;
                         Audio.PlaySoundAtTransform("light", transform);
                     }
-                    else {
+                    else
+                    {
                         CurrentIndex -= 1;
-                    PositionPlanetsRotators[0].transform.localEulerAngles = new Vector3(0, (float)(UpIndex * 90 + (CurrentIndex % 64 * 5.625)), 0);
-                    Audio.PlaySoundAtTransform("light", transform);
+                        PositionPlanetsRotators[0].transform.localEulerAngles = new Vector3(0, (float)(UpIndex * 90 + (CurrentIndex % 64 * 5.625)), 0);
+                        Audio.PlaySoundAtTransform("light", transform);
                     }
                     break;
             }
@@ -230,16 +243,92 @@ public class SaturnScript : MonoBehaviour {
             Audio.PlaySoundAtTransform("saber", transform);
         }
     }
+    IEnumerable<Movement> GetMovements(MazeCell cell)
+    {
+        string walls = cell.isOuter ? OuterMazeWalls[cell.pos] : InnerMazeWalls[cell.pos];
+        int x = cell.pos % 64;
+        int y = cell.pos / 64;
+        if (!walls.Contains('U'))
+            yield return new Movement(cell, new MazeCell(64 * (y - 1) + x, cell.isOuter), 'U');
+        if (!walls.Contains('R'))
+            yield return new Movement(cell, new MazeCell(64 * y + ((x + 1) % 64), cell.isOuter), 'R');
+        if (!walls.Contains('D'))
+            yield return new Movement(cell, new MazeCell(64 * (y + 1) + x, cell.isOuter), 'D');
+        if (!walls.Contains('L'))
+            yield return new Movement(cell, new MazeCell(64 * y + ((x + 63) % 64), cell.isOuter), 'L');
+        yield return new Movement(cell, new MazeCell(cell.pos, !cell.isOuter), cell.isOuter ? 'I' : 'O');
+    }
+    string FindPath(MazeCell start, MazeCell end)
+    {
+        if (start == end) return "";
+        Queue<MazeCell> q = new Queue<MazeCell>();
+        List<Movement> allMoves = new List<Movement>();
+        HashSet<MazeCell> visitedCells = new HashSet<MazeCell>();
+        q.Enqueue(start);
+        while (q.Count > 0)
+        {
+            MazeCell cur = q.Dequeue();
+            foreach (Movement movement in GetMovements(cur))
+            {
+                if (visitedCells.Add(movement.end))
+                {
+                    q.Enqueue(movement.end);
+                    allMoves.Add(movement);
+                }
+            }
 
+            if (cur == end)
+            {
+                Debug.Log("Found end!");
+                break;
+            }
+        }
+        Debug.LogFormat("{0} -> {1}", start, end);
+        Movement lastMove = allMoves.First(x => x.end == end);
+        List<Movement> path = new List<Movement>() { lastMove };
+        while (lastMove.start != start)
+        {
+            lastMove = allMoves.First(x => x.end == lastMove.start);
+            path.Add(lastMove);
+        }
+        path.Reverse();
+        Debug.Log(path.Select(x => x.movement).Join(""));
+        return path.Select(x => x.movement).Join("");
+    }
+    struct MazeCell : IEquatable<MazeCell>
+    {
+        public int pos;
+        public bool isOuter;
+        public MazeCell(int pos, bool isOuter)
+        {
+            this.pos = pos;
+            this.isOuter = isOuter;
+        }
+        public bool Equals(MazeCell other) { return pos == other.pos && isOuter == other.isOuter; }
+        public static bool operator ==(MazeCell lhs, MazeCell rhs) { return lhs.Equals(rhs); }
+        public static bool operator !=(MazeCell lhs, MazeCell rhs) { return !lhs.Equals(rhs); }
+    }
+    struct Movement
+    {
+        public MazeCell start, end;
+        public char movement;
+        public Movement(MazeCell start, MazeCell end, char movement)
+        {
+            this.start = start;
+            this.end = end;
+            this.movement = movement;
+        }
+    }
     //twitch plays
-    #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} hover <white/green> [Hovers over the sphere with the specified color] | !{0} move <U/D/L/R/F/B> [Presses the specified sphere (U=Up, D=Down, L=Left, R=Right, F=Front, B=Back)] | !{0} toggle [Toggles planet visibility] | Presses can be chained, for ex: !{0} press UURBL";
-    #pragma warning restore 414
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} hover <white/green> [Hovers over the sphere with the specified color] | !{0} move <U/D/L/R/I/O> [To move in that direction (Up, Down, Left, Right, In, Out)] | !{0} toggle [Toggles planet visibility] | Presses can be chained, for ex: !{0} press UURBL";
+#pragma warning restore 414
+
     IEnumerator ProcessTwitchCommand(string command)
     {
         command = command.Trim().ToUpperInvariant();
         Match mHover = Regex.Match(command, @"^HOVER\s+(W(?:HITE)|G(?:REEN))$");
-        Match mMove = Regex.Match(command, @"^(?:(?:MOVE|PRESS)\s+)?((?:[URDLFB][\s,;]*)+)$");
+        Match mMove = Regex.Match(command, @"^(?:(?:MOVE|PRESS)\s+)?((?:[URDLOI][\s,;]*)+)$");
         if (command == "TOGGLE" || command == "HIDE")
         {
             yield return null;
@@ -258,9 +347,35 @@ public class SaturnScript : MonoBehaviour {
         else if (mMove.Success)
         {
             yield return null;
-            char[] btns = mMove.Groups[1].Value.Where(ch => "URDLFB".Contains(ch)).ToArray();
-            foreach (char btn in btns)
-                yield return Ut.Press(PlanetButtons["URDLFB".IndexOf(btn)], 0.2f);
+            char[] btns = mMove.Groups[1].Value.Where(ch => "URDLOI".Contains(ch)).ToArray();
+            yield return InputMoves(btns);
         }
+    }
+    IEnumerator InputMoves(IEnumerable<char> btns)
+    {
+        foreach (char btn in btns)
+        {
+            KMSelectable press;
+            if (btn == 'O')
+                press = PlanetButtons[4];
+            else if (btn == 'I')
+                press = PlanetButtons[5];
+            else
+            {
+                int initIx = "URDL".IndexOf(btn);
+                press = PlanetButtons[(initIx + UpIndex) % 4];
+            }
+            yield return Ut.Press(press, 0.1f);
+        }
+    }
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (!visible)
+        {
+            HideButton.OnInteract();
+            while (isAnimating)
+                yield return true;
+        }
+        yield return InputMoves(FindPath(new MazeCell(CurrentIndex, CurrentOuter), new MazeCell(EndIndex, EndOuter)));
     }
 }
