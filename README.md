@@ -6,7 +6,7 @@ A series of modules created by me and many others.
 Credits:
 - Original Concept by Blan
 - Models by Blan
--
+---
 - ☿ (Mercury): Basic idea by Kiki, Module by Blan
 - ♀ (Venus): Module by Blan
 - ♁ (Earth): Module by Blan
@@ -14,5 +14,5 @@ Credits:
 - ♃ (Jupiter): Module by Deaf, Reimplemented by Blan
 - ♄ (Saturn): Module by eXish
 - ♅ (Uranus): Module by tandyCake
-- ♆ (Neptune): Module by Blan, Help by BakersDozenBagels, tandyCake, Quinn Wuest
+- ♆ (Neptune): Module by Blan, Help by tandyCake, Quinn Wuest
 - ♇ (Pluto): Idea by Fish, Implemented by Blan
