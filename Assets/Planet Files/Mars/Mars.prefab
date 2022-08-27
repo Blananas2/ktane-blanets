@@ -162,8 +162,24 @@ GameObject:
   - component: {fileID: 23897155208073846}
   - component: {fileID: 114724162645856444}
   - component: {fileID: 114044221666042404}
+  - component: {fileID: 135243321727229018}
   m_Layer: 0
   m_Name: Planet Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1718114433205910
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4178168450100492}
+  m_Layer: 0
+  m_Name: BackingParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,6 +269,20 @@ Transform:
   m_Father: {fileID: 4257340207950476}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4178168450100492
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1718114433205910}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.0128, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4363697908931242}
+  m_Father: {fileID: 4729302901744512}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4257340207950476
 Transform:
   m_ObjectHideFlags: 1
@@ -290,11 +320,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1020103096184710}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.008, z: 0}
+  m_LocalPosition: {x: 0, y: 0.0047999993, z: 0}
   m_LocalScale: {x: 0.2, y: 0.01, z: 0.2}
   m_Children: []
-  m_Father: {fileID: 4729302901744512}
-  m_RootOrder: 3
+  m_Father: {fileID: 4178168450100492}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4373075230998532
 Transform:
@@ -402,7 +432,7 @@ Transform:
   - {fileID: 4390462130763582}
   - {fileID: 4428327860297816}
   - {fileID: 4627445739172966}
-  - {fileID: 4363697908931242}
+  - {fileID: 4178168450100492}
   - {fileID: 4325021962149248}
   m_Father: {fileID: 4257340207950476}
   m_RootOrder: 0
@@ -570,7 +600,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: e373ee0b572928a4587549fe4c533dd9, type: 2}
+  - {fileID: 2100000, guid: da4cec9bb3b6f704d935d162f1108fd4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -672,7 +702,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1812248056403662}
-  m_Mesh: {fileID: 4300000, guid: 59fa09bd9ec6aba45b4ef506b6f90a62, type: 3}
+  m_Mesh: {fileID: 4300000, guid: fb5419e1c6aeddc419a1e8e5fa7d39f3, type: 3}
 --- !u!33 &33954483089112982
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -776,7 +806,7 @@ MonoBehaviour:
   hideButton: {fileID: 114619631916584806}
   planet: {fileID: 1920060340050848}
   planetButton: {fileID: 114724162645856444}
-  background: {fileID: 1020103096184710}
+  background: {fileID: 1718114433205910}
   pivot: {fileID: 4155630631104696}
   allSounds:
   - {fileID: 8300000, guid: 0b97d0ed2ec0b084c9f93d6855967b75, type: 3}
@@ -908,7 +938,8 @@ MonoBehaviour:
   IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114004650055101732}
-  SelectableColliders: []
+  SelectableColliders:
+  - {fileID: 135243321727229018}
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
@@ -975,3 +1006,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!135 &135243321727229018
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1684572335257766}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: -0.0000076293945, y: 0, z: 0}

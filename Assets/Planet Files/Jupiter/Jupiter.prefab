@@ -198,7 +198,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4800689055501220}
   - component: {fileID: 33322410583140340}
-  - component: {fileID: 135198815618885920}
   - component: {fileID: 114430988283400046}
   m_Layer: 0
   m_Name: Planet HL
@@ -283,7 +282,7 @@ Transform:
   m_GameObject: {fileID: 1812248056403662}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.1562, y: 0.0313, z: 0.151}
-  m_LocalScale: {x: 0.099999994, y: 0.099999994, z: 0.099999994}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4428327860297816}
   - {fileID: 4666684294092074}
@@ -476,7 +475,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: e373ee0b572928a4587549fe4c533dd9, type: 2}
+  - {fileID: 2100000, guid: da4cec9bb3b6f704d935d162f1108fd4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -537,7 +536,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1812248056403662}
-  m_Mesh: {fileID: 4300000, guid: 59fa09bd9ec6aba45b4ef506b6f90a62, type: 3}
+  m_Mesh: {fileID: 4300000, guid: fb5419e1c6aeddc419a1e8e5fa7d39f3, type: 3}
 --- !u!33 &33984400645953456
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -636,6 +635,7 @@ MonoBehaviour:
   HideButton: {fileID: 114619631916584806}
   Planet: {fileID: 1876663907556358}
   Jupiter: {fileID: 114977675112177516}
+  sl: {fileID: 114907837735438752}
   Background: {fileID: 1020103096184710}
   StatusLightPosition: {fileID: 1283567413230246}
 --- !u!114 &114335356435126844
@@ -704,7 +704,8 @@ MonoBehaviour:
   IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114830239982508106}
-  SelectableColliders: []
+  SelectableColliders:
+  - {fileID: 135045189305153692}
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
@@ -775,7 +776,8 @@ MonoBehaviour:
   IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114430988283400046}
-  SelectableColliders: []
+  SelectableColliders:
+  - {fileID: 135757930983315946}
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
@@ -787,18 +789,6 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1323809365779616}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135198815618885920
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1920060340050848}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -827,5 +817,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.49999997
   m_Center: {x: 0, y: 0, z: 0}

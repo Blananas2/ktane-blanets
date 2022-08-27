@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using KModkit;
+using System.Text.RegularExpressions;
 
 public class UranusModuleScript : MonoBehaviour
 { 
@@ -13,14 +13,14 @@ public class UranusModuleScript : MonoBehaviour
     public KMAudio Audio;
 
     public KMSelectable HideButton;
-    public GameObject WholeThing, Background, Planet;
+    public GameObject WholeThing, Planet;
+    public Transform Background;
     public Transform modTF, parentTF, childTF;
 
     public KMSelectable[] PlanetButtons;
     public MeshRenderer[] highlightIndicators;
     public Material[] SphereColors;
 
-    bool Visible = true;
     bool isAnimating;
     bool TwitchPlaysActive;
 
@@ -52,11 +52,14 @@ public class UranusModuleScript : MonoBehaviour
     string[] directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
     string[] directionNames = { "North", "Northeast", "East", "Southeast", "South", "Southwest", "West", "Northwest" };
     Vector3[] axes = { new Vector3(1, 0, 0), new Vector3(1, -1, 0), new Vector3(0, -1, 0), new Vector3(-1, -1, 0), new Vector3(-1, 0, 0), new Vector3(-1, 1, 0), new Vector3(0, 1, 0), new Vector3(1, 1, 0) };
+    private int startingPosition;
     int currentPosition;
     int targetValue = 0;
     int currentValue = 0;
     int moveCounter = 0;
     int previousCell = -1;
+    private bool visible = true;
+
     void Awake()
     {
         moduleId = moduleIdCounter++;
@@ -80,7 +83,8 @@ public class UranusModuleScript : MonoBehaviour
     {
         if (UnityEngine.Random.Range(0, 200) == 173) Planet.GetComponent<MeshRenderer>().material = SphereColors[6];
         CalculateTarget();
-        currentPosition = UnityEngine.Random.Range(0, 50);
+        startingPosition = UnityEngine.Random.Range(0, 50);
+        currentPosition = startingPosition;
         Debug.LogFormat("[Uranus #{0}] Your starting coordinate is column {1}, row {2}", moduleId, currentPosition % 10 + 1, currentPosition / 10 + 1);
         GetColors();
         StartCoroutine(PlanetRotation());
@@ -228,87 +232,106 @@ public class UranusModuleScript : MonoBehaviour
     {
         if (isAnimating) yield break;
         isAnimating = true;
-        while (Background.transform.localPosition.y < 0.06)
-        {
-            Background.transform.localPosition += new Vector3(0, 0.0025f, 0);
-            Background.transform.localScale += new Vector3(0, 0.005f, 0);
-            yield return null;
-        }
-        Visible = !Visible;
-        WholeThing.SetActive(Visible);
-        Planet.SetActive(Visible);
-        yield return new WaitForSecondsRealtime(0.5f);
-        while (Background.transform.localPosition.y > -0.008)
-        {
-            Background.transform.localPosition -= new Vector3(0, 0.0025f, 0);
-            Background.transform.localScale -= new Vector3(0, 0.005f, 0);
-            yield return null;
-        }
-        Debug.LogFormat("<Uranus #{0}> Visible toggled to {1}.", moduleId, Visible);
-        yield return null;
+        yield return Ut.Animation(0.75f, d => 
+                    Background.localScale = new Vector3(1, Mathf.Lerp(1, 18, d), 1));
+        yield return new WaitForSeconds(0.25f);
+        visible = !visible;
+        WholeThing.SetActive(visible);
+        Planet.SetActive(visible);
+
+        currentPosition = startingPosition;
+        currentValue = 0;
+        previousCell = -1;
+
+        yield return Ut.Animation(0.75f, d => 
+                    Background.localScale = new Vector3(1, Mathf.Lerp(18, 1, d), 1));
         isAnimating = false;
     }
+    string[] FindPath(PositionData start)
+    {
+        if (start.score == targetValue)
+            return new string[0];
+        Queue<PositionData> q = new Queue<PositionData>();
+        List<Movement> allMoves = new List<Movement>();
+        q.Enqueue(start);
+        while (q.Count > 0)
+        {
+            PositionData cur = q.Dequeue();
+            foreach (KeyValuePair<string, int> adj in GetAdjacents(cur.cell))
+            {
+                if (adj.Value != cur.prevCell)
+                {
+                    int newScore = cur.moves % 2 == 0 ? cur.score + ValueTable[adj.Value] : cur.score - ValueTable[adj.Value];
+                    PositionData next = new PositionData { cell = adj.Value, prevCell = cur.cell, score = newScore, moves = cur.moves + 1 };
+                    q.Enqueue(next);
+                    allMoves.Add(new Movement { start = cur, end = next, direction = adj.Key } );
+                }
+            }
+            if (cur.score == targetValue)
+            {
+                Debug.Log("Found end!");
+                break;
+            }
+        }
+        Movement lastMove = allMoves.First(x => x.end.score == targetValue);
+        List<Movement> path = new List<Movement>() { lastMove };
+        while (!lastMove.start.Equals(start))
+        {
+            lastMove = allMoves.First(x => x.end.Equals(lastMove.start));
+            path.Add(lastMove);
+        }
+        path.Reverse();
+        return path.Select(x => x.direction).ToArray();
+    }
+    struct PositionData
+    {
+        public int cell, prevCell, score, moves;
+    }
+    struct Movement
+    {
+        public PositionData start, end;
+        public string direction;
+    }
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"Use !{0} move N NE E SE S SW W NW to move in those directions. Use !{0} hide to press the hide button.";
+    private readonly string TwitchHelpMessage = @"Use !{0} move N NE E SE S SW W NW to move in those directions. Use !{0} hide to press the hide button and reset the module.";
 #pragma warning restore 414
 
-    IEnumerator ProcessTwitchCommand(string input)
+    IEnumerator MoveDirs(string[] dirs)
     {
-        string Command = input.Trim().ToUpperInvariant();
-        List<string> parameters = Command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        int[][] pairs = new int[][] { new int[] { 2, 0 }, new int[] { 2, 3 }, new int[] { 1, 3 }, new int[] { 0, 3 }, new int[] { 0, 2 }, new int[] { 0, 1 }, new int[] { 3, 1 }, new int[] { 3, 0 } };
-        if (parameters.First() != "MOVE")
-            yield break;
-        parameters.Remove("MOVE");
-        if (parameters.Any(x => !directions.Contains(x)))
-            yield break;
-        yield return null;
-        foreach (string direction in parameters)
+        foreach (string direction in dirs)
         {
+            int[][] pairs = new int[][] { new int[] { 2, 0 }, new int[] { 2, 3 }, new int[] { 1, 3 }, new int[] { 0, 3 }, new int[] { 0, 2 }, new int[] { 0, 1 }, new int[] { 3, 1 }, new int[] { 3, 0 } };
             int[] action = pairs[Array.IndexOf(directions, direction)];
             PlanetButtons[action[0]].OnInteract();
             PlanetButtons[action[1]].OnInteractEnded();
             yield return new WaitForSeconds(0.4f);
         }
     }
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        command = command.Trim().ToUpperInvariant();
+        Match m = Regex.Match(command, @"^(?:MOVE\s+)?((?:[NESW][NESW]?\s*)+)$");
+        if (command == "HIDE" || command == "RESET")
+        {
+            yield return null;
+            HideButton.OnInteract();
+        }
+        else if (m.Success && visible)
+        {
+            yield return null;
+            yield return MoveDirs(m.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
     
     IEnumerator TwitchHandleForcedSolve()
     {
-        int attempts = 0;
-        solving:
-        int cap = attempts / 200 + 10;
-        int virtualCurrentCell = currentPosition;
-        int virtualCurrentValue = currentValue;
-        int virtualMoveCounter = 0;
-        List<string> path = new List<string>();
-        int virtualPrev = previousCell;
-        while (virtualCurrentValue != targetValue)
+        if (!visible)
         {
-            KeyValuePair<string, int> move = GetAdjacents(virtualCurrentCell).Where(x => x.Value != virtualPrev).PickRandom();
-            path.Add(move.Key);
-            virtualPrev = virtualCurrentCell;
-            virtualCurrentCell = move.Value;
-            virtualCurrentValue += (virtualMoveCounter % 2 == 0) ? ValueTable[virtualCurrentCell] : -1 * ValueTable[virtualCurrentCell];
-            virtualMoveCounter++;
-            attempts++;
+            HideButton.OnInteract();
+            while (isAnimating)
+                yield return true;
         }
-        Debug.Log("End value: " + virtualCurrentValue);
-        if (attempts > 200)
-        {
-            attempts = 0;
-            cap++;
-        }
-        if (path.Count > cap)
-        {
-            goto solving;
-        }
-        int[][] pairs = new int[][] { new int[] { 2, 0 }, new int[] { 2, 3 }, new int[] { 1, 3 }, new int[] { 0, 3 }, new int[] { 0, 2 }, new int[] { 0, 1 }, new int[] { 3, 1 }, new int[] { 3, 0 } };
-        foreach (string movement in path)
-        {
-            int[] action = pairs[Array.IndexOf(directions, movement)];
-            PlanetButtons[action[0]].OnInteract();
-            PlanetButtons[action[1]].OnInteractEnded();
-            yield return new WaitForSeconds(0.4f);
-        }
+        string[] path = FindPath(new PositionData { cell = currentPosition, score = currentValue, prevCell = previousCell, moves = moveCounter });
+        yield return MoveDirs(path);
     }
 }
