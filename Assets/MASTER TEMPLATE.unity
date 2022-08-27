@@ -379,6 +379,11 @@ Prefab:
       propertyPath: AsteroidMeshes.Array.data[8]
       value: 
       objectReference: {fileID: 4300000, guid: f72ab783ea016f440940c067baf81c64, type: 3}
+    - target: {fileID: 114853960920223876, guid: 22dc4b836f9b53d4fb800bd4fbfaa91a,
+        type: 2}
+      propertyPath: RequiresTimerVisibility
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 22dc4b836f9b53d4fb800bd4fbfaa91a, type: 2}
   m_IsPrefabParent: 0
@@ -423,6 +428,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1676409040304040, guid: e2641ac63d16d7e448f0b57c54d82f39, type: 2}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114853960920223876, guid: e2641ac63d16d7e448f0b57c54d82f39,
+        type: 2}
+      propertyPath: RequiresTimerVisibility
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
