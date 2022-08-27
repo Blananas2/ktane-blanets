@@ -250,7 +250,7 @@ public class UranusModuleScript : MonoBehaviour
     string[] FindPath(PositionData start)
     {
         if (start.score == targetValue)
-            return new List<string>();
+            return new string[0];
         Queue<PositionData> q = new Queue<PositionData>();
         List<Movement> allMoves = new List<Movement>();
         q.Enqueue(start);
