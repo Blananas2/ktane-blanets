@@ -221,5 +221,77 @@ public class MercuryScript : MonoBehaviour { //depends on name
                 yield return Ut.Press(Tubes[ch - '1'], 0.33f);
         }
     }
-    //Whoever makes an autosolver for this I will cashapp 0 dollars.
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (heldBall != -1)
+            for (int tube = 0; tube < 5; tube++)
+                if (currentBalls[tube].Count != 5)
+                    yield return Ut.Press(Tubes[tube], 0.15f);
+        while (!moduleSolved)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                yield return EmptyTube(i);
+                yield return FillTube(i);
+            }
+            for (int i = 0; i < 5; i++)
+                yield return FillTube(i);
+        }
+        moves.Add(presses);
+        Debug.Log(moves.Join());
+        Debug.Log(moves.Average());
+    }
+    List<int>[] currentsL { get { return currentBalls.Select(s => s.ToList()).ToArray(); } }
+    List<int>[] solutionL { get { return solutionBalls.Select(s => s.ToList()).ToArray(); } }
+    IEnumerator EmptyTube(int ix)
+    {
+        while (!currentsL[ix].SequenceEqual(solutionL[ix].Skip(solutionL[ix].Count - currentsL[ix].Count))){
+            yield return DiscardTop(ix);
+        }
+    }
+    IEnumerator DiscardTop(int from, int ignore = -1 )
+    {
+        for (int offset = 1; offset < 5; offset++)
+        {
+            int to = (from + offset) % 5;
+            if (currentBalls[to].Count != 5 && to != ignore)
+            {
+                yield return Move(from, to);
+                yield break;
+            }
+        }
+    }
+    static List<int> moves = new List<int>();
+    int presses;
+    IEnumerator FillTube(int to)
+    {
+        while (currentBalls[to].Count < solutionBalls[to].Count)
+        {
+            List<int>[] cur = currentsL;
+            int find = solutionL[to][solutionL[to].Count - 1 - cur[to].Count];
+            for (int depth = 0; depth < 5; depth++)
+            {
+                for (int offset = 1; offset < 5; offset++)
+                {
+                    int from = (to + offset) % 5;
+                    Debug.LogFormat("{0} balls deep (haha) into tube {1}.", depth + 1, from);
+                    if (depth < cur[from].Count && cur[from][depth] == find)
+                    {
+                        for (int discardCount = 0; discardCount < depth; discardCount++)
+                            yield return DiscardTop(from, ignore: to);
+                        yield return Move(from, to);
+                        goto CHECK_IF_FULL;
+                    }
+                }
+            }
+            throw new Exception(string.Format("Could not find ball of color {0} to fill tube {1}.", char.ToUpper(colorNames[find]), to + 1));
+            CHECK_IF_FULL:;
+        }
+    }
+    IEnumerator Move(int from, int to)
+    {
+        yield return Ut.Press(Tubes[from], 0.15f);
+        yield return Ut.Press(Tubes[to],   0.15f);
+        presses += 2;
+    }
 }
