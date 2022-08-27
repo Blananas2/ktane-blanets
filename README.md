@@ -4,8 +4,8 @@ A series of modules created by me and many others.
 \*Not to scale, or realistic in any other manner to be honest.
 
 Credits:
-- Original Concept by Blan
-- Models by Blan
+- Original Concept and Models by Blan
+- Help with manuals by tandyCake and Luminosity Tim
 - TP Support for Mars written by TasThiluna
 - TP Support for other planets written by tandyCake
 ---
