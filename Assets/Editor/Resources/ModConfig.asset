@@ -15,11 +15,12 @@ MonoBehaviour:
   title: Blanets
   author: Blananas2
   description: "*Not to scale, or realistic in any other manner to be honest.\n\nCredits:\r\nOriginal
-    Concept by Blan\r\nModels by Blan\r\n\r\n\u263F: Basic idea by Kiki, Module by
-    Blan\r\n\u2640: Module by Blan\r\n\u2641: Module by Blan\r\n\u2642: Module by
-    TasThing\r\n\u2643: Module by Deaf, Reimplemented by Blan\r\n\u2644: Module by
-    eXish\r\n\u2645: Module by tandyCake\r\n\u2646: Module by Blan, Help by BakersDozenBagels,
-    tandyCake, Quinn Wuest\n\u2647: Idea by Fish, Implemented by Blan"
+    Concept by Blan\r\nModels by Blan\r\nHelp with manuals by tandyCake and Luminosity
+    Tim\nTP Support and autosolvers by tandyCake and TasThiluna\n\r\n\u263F: Basic
+    idea by Kiki, Module by Blan\r\n\u2640: Module by Blan\r\n\u2641: Module by Blan\r\n\u2642:
+    Module by TasThiluna\n\u2643: Module by Deaf, Reimplemented by Blan\r\n\u2644:
+    Module by eXish\r\n\u2645: Module by tandyCake\r\n\u2646: Module by Blan, Help
+    by tandyCake and Quinn Wuest\n\u2647: Idea by Fish, Implemented by Blan"
   version: 1.0
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: ee59b91033715eb4cac2aa6cba7f3fcc, type: 3}

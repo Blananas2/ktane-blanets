@@ -223,6 +223,12 @@ public class MercuryScript : MonoBehaviour { //depends on name
     }
     IEnumerator TwitchHandleForcedSolve()
     {
+        if (!visible)
+        {
+            HideButton.OnInteract();
+            while (isAnimating)
+                yield return true;
+        }
         if (heldBall != -1)
             for (int tube = 0; tube < 5; tube++)
                 if (currentBalls[tube].Count != 5)
@@ -238,8 +244,8 @@ public class MercuryScript : MonoBehaviour { //depends on name
                 yield return FillTube(i);
         }
         moves.Add(presses);
-        Debug.Log(moves.Join());
-        Debug.Log(moves.Average());
+        Debug.Log("<Mercury Autosolver> " + moves.Join());
+        Debug.Log("<Mercury Autosolver> " + moves.Average());
     }
     List<int>[] currentsL { get { return currentBalls.Select(s => s.ToList()).ToArray(); } }
     List<int>[] solutionL { get { return solutionBalls.Select(s => s.ToList()).ToArray(); } }
@@ -274,7 +280,7 @@ public class MercuryScript : MonoBehaviour { //depends on name
                 for (int offset = 1; offset < 5; offset++)
                 {
                     int from = (to + offset) % 5;
-                    Debug.LogFormat("{0} balls deep (haha) into tube {1}.", depth + 1, from);
+                    Debug.LogFormat("<Mercury Autosolver> {0} balls deep (haha) into tube {1}.", depth + 1, from);
                     if (depth < cur[from].Count && cur[from][depth] == find)
                     {
                         for (int discardCount = 0; discardCount < depth; discardCount++)

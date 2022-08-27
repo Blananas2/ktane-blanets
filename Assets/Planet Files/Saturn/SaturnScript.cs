@@ -288,11 +288,11 @@ public class SaturnScript : MonoBehaviour
 
             if (cur == end)
             {
-                Debug.Log("Found end!");
+                Debug.Log("<Saturn Autosolver> Found end!");
                 break;
             }
         }
-        Debug.LogFormat("{0} -> {1}", start, end);
+        Debug.LogFormat("<Saturn Autosolver> {0} -> {1}", start, end);
         Movement lastMove = allMoves.First(x => x.end == end);
         List<Movement> path = new List<Movement>() { lastMove };
         while (lastMove.start != start)
@@ -301,7 +301,7 @@ public class SaturnScript : MonoBehaviour
             path.Add(lastMove);
         }
         path.Reverse();
-        Debug.Log(path.Select(x => x.movement).Join(""));
+        Debug.Log("<Saturn Autosolver> " + path.Select(x => x.movement).Join(""));
         return path.Select(x => x.movement).Join("");
     }
     struct MazeCell : IEquatable<MazeCell>

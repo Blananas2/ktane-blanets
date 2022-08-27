@@ -74,7 +74,7 @@ public class VenusScript : MonoBehaviour { //depends on name
         do end = UnityEngine.Random.Range(0, 24);
         while (FindPath(start, end).Length < 2);
 
-        Debug.Log("end = " + end);
+        Debug.Log("<Venus> end = " + end);
         current = start;
 
         Debug.LogFormat("[Venus #{0}] Starting at {1}, Ending at {2}.", moduleId, colors[start], colors[end]);
@@ -144,7 +144,7 @@ public class VenusScript : MonoBehaviour { //depends on name
                     int[] xVals = new int[] { 1, 0, 0, -1 };
                     int[] zVals = new int[] { 0, 1, -1, 0 };
                     current = MoveFrom(current, dirs[i]);
-                    Debug.Log("current = " + current);
+                    Debug.Log("<Venus> current = " + current);
                     Debug.LogFormat("[Venus #{0}] You went {1} from {2}, now you're at {3}.", moduleId, directionNames[i], b, colors[current]);
                     Audio.PlaySoundAtTransform("match", transform);
                     //StartCoroutine(GeXish(xVals[i], zVals[i]));
@@ -212,11 +212,11 @@ public class VenusScript : MonoBehaviour { //depends on name
             }
             if (cur == end)
             {
-                Debug.Log("Found end!");
+                Debug.Log("<Venus Autosolver> Found end!");
                 break;
             }
         }
-        Debug.LogFormat("{0} -> {1}", start, end);
+        Debug.LogFormat("<Venus Autosolver> {0} -> {1}", start, end);
         Movement lastMove = allMoves.First(x => x.end == end);
         List<Movement> path = new List<Movement>() { lastMove };
         while (lastMove.start != start)
@@ -225,7 +225,7 @@ public class VenusScript : MonoBehaviour { //depends on name
             path.Add(lastMove);
         }
         path.Reverse();
-        Debug.Log(path.Select(x => x.direction).Join(""));
+        Debug.Log("<Venus Autosolver> " + path.Select(x => x.direction).Join(""));
         return path.Select(x => x.direction).Join("");
     }
     int MoveFrom(int start, char d)
@@ -293,7 +293,7 @@ public class VenusScript : MonoBehaviour { //depends on name
         {
             yield return new WaitUntil(() => !isAnimating);
             yield return new WaitForSeconds(0.2f);
-            Debug.Log(ch);
+            Debug.Log("<Venus Autosolver> " + ch);
             PlanetButtons[dirs.IndexOf(ch)].OnInteract();
             yield return new WaitForSeconds(0.1f);
         }

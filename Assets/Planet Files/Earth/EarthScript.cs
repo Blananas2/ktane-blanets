@@ -304,11 +304,11 @@ public class EarthScript : MonoBehaviour { //depends on name
             }
             if (cur == end)
             {
-                Debug.Log("Found end!");
+                Debug.Log("<Earth Autosolver> Found end!");
                 break;
             }
         }
-        Debug.LogFormat("{0} -> {1}", start, end);
+        Debug.LogFormat("<Earth Autosolver> {0} -> {1}", start, end);
         Movement lastMove = allMoves.First(x => x.end == end);
         List<Movement> path = new List<Movement>() { lastMove };
         while (lastMove.start != start)
@@ -317,7 +317,7 @@ public class EarthScript : MonoBehaviour { //depends on name
             path.Add(lastMove);
         }
         path.Reverse();
-        Debug.Log(path.Select(x => x.pressed).Join());
+        Debug.Log("<Earth Autosolver> " + path.Select(x => x.pressed).Join());
         return path.Select(x => x.pressed).ToList();
     }
     class TriTuple

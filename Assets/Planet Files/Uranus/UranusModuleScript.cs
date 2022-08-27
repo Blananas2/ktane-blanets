@@ -172,7 +172,7 @@ public class UranusModuleScript : MonoBehaviour
             if (currentValue != targetValue) Audio.PlaySoundAtTransform("Roll", childTF);
             CheckSolve();
         }
-        Debug.Log(GetAdjacents(currentPosition).Join());
+        Debug.Log("<Uranus> " + GetAdjacents(currentPosition).Join());
     }
 
     void GetColors()
@@ -269,7 +269,7 @@ public class UranusModuleScript : MonoBehaviour
             }
             if (cur.score == targetValue)
             {
-                Debug.Log("Found end!");
+                Debug.Log("<Uranus Autosolver> Found end!");
                 break;
             }
         }

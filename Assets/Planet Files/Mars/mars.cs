@@ -198,13 +198,16 @@ public class mars : MonoBehaviour
     private IEnumerator HidePlanet()
     {
         if (isAnimating) yield break;
-        isAnimating = true;
-        yield return Ut.Animation(0.5f, d => background.transform.localScale = new Vector3(1, Mathf.Lerp(1, 12, d), 1));
-        visible = !visible;
-        planet.SetActive(visible);
-        planetButton.gameObject.SetActive(visible);
-        yield return new WaitForSecondsRealtime(0.25f);
-        yield return Ut.Animation(0.5f, d => background.transform.localScale = new Vector3(1, Mathf.Lerp(12, 1, d), 1));
+		isAnimating = true;
+		if (visible)
+			yield return Ut.Animation(1, d => {planet.transform.localScale = Mathf.Lerp(0.05f, 0, d) * Vector3.one; 
+                                                planetButton.transform.localScale = Mathf.Lerp(0.005f, 0, d) * Vector3.one;});
+		else
+			yield return Ut.Animation(1, d => {planet.transform.localScale = Mathf.Lerp(0, 0.05f, d) * Vector3.one; 
+                                                planetButton.transform.localScale = Mathf.Lerp(0, 0.005f, d) * Vector3.one;});
+
+            //0.005
+		visible = !visible;
         Debug.LogFormat("<Mars #{0}> Visible toggled to {1}.", moduleId, visible);
         isAnimating = false;
     }

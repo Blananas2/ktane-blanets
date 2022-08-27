@@ -349,7 +349,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
 
             if (CheckEnemy(enemy, cur) && !bannedRNGvalues.Contains(cur))
             {
-                Debug.Log("Found end!");
+                Debug.Log("<Neptune Autosolver> Found end!");
                 break;
             }
         }
@@ -361,8 +361,8 @@ public class NeptuneScript : MonoBehaviour { //depends on name
             path.Add(lastMove);
         }
         path.Reverse();
-        Debug.Log(path.Select(x => x.mod).Join());
-        Debug.LogFormat("{0} items in queue.", q.Count);
+        Debug.Log("<Neptune Autosolver> " + path.Select(x => x.mod).Join());
+        Debug.LogFormat("<Neptune Autosolver> {0} items in queue.", q.Count);
         return path.Select(x => x.mod).ToArray();
     }
 
