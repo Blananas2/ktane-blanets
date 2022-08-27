@@ -316,7 +316,7 @@ public class UranusModuleScript : MonoBehaviour
             yield return null;
             HideButton.OnInteract();
         }
-        else if (m.Success)
+        else if (m.Success && visible)
         {
             yield return null;
             yield return MoveDirs(m.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));

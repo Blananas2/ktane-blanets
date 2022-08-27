@@ -345,7 +345,7 @@ public class SaturnScript : MonoBehaviour
         }
         if (!visible)
             yield break;
-        if (mHover.Success)
+        if (mHover.Success && visible)
         {
             yield return null;
             KMSelectable hover = mHover.Groups[1].Value[0] == 'W' ? CurrentPosButton : CurrentEndButton;
@@ -353,7 +353,7 @@ public class SaturnScript : MonoBehaviour
             yield return new WaitForSeconds(2);
             hover.OnHighlightEnded();
         }
-        else if (mMove.Success)
+        else if (mMove.Success && visible)
         {
             yield return null;
             char[] btns = mMove.Groups[1].Value.Where(ch => "URDLOI".Contains(ch)).ToArray();
