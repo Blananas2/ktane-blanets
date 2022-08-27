@@ -22,7 +22,6 @@ public class PlutoScript : MonoBehaviour { //depends on name
     public TextMesh[] PVPwords;
     public Material[] PVPbackColors;
     public GameObject PVPbackObj;
-    
     public GameObject AsteroidsObj;
     public KMSelectable[] Asteroids;
     public Mesh[] AsteroidMeshes;
@@ -46,6 +45,7 @@ public class PlutoScript : MonoBehaviour { //depends on name
     //SHAPES: 0=goose, 1=ampersand, 2=creeper, 3=gex, 4=turd, 5=waluigi, 6=automobile, 7=gatorade_bottle, 8=bucket, 9=binary_tree
     int validTime = -1;
     int asteroidsDestroyed = 0;
+    bool[] destroyed = new bool[4];
     int[] fourAsteroids = {-1, -1, -1, -1};
     string[] colorNames = { "blue", "red", "green", "yellow", "magenta", "orange", "cyan", "white", "black", "gray" };
     string[] fourLetterWords = {"ROOT","WARM","THEM","MAKE","TIES","LOTS","RUGS","SUCH","STEM","DIET","RENT","AQUA","LOWS","PATH","HULL","DRAW","SLOT","BRAD","EGGS","MEMO","WIFE","SHED","FIRM","SKIP","DARK","REAR","EDGE","LOCK","BOWL","DEAD","ZONE","GOOD","FLAT","GREW","CRAP","PUBS","PEST","ORAL","FORD","MILE","TRIM","HIGH","OKAY","FLOW","HITS","JACK","RUBY","NODE","REEF","TANK","PUTS","TRIP","POST","PAIN","READ","GEAR","THEN","FATE","ARMY","MINS","DREW","WIND","FAME","FUNK","SOLD","CREW","WIFI","CITE","DAMN","FARM","NOSE","HOOD","CORN","FAIR","ADAM","TIDE","DISH","GOAL","DUMP","GUAM","GETS","SOUP","SYNC","LAWN","ROPE","CLAN","MESA","BALL","LORD","EACH","REEL","TIER","BYTE","LIFT","TUNE","HEAR","MALL","HELL","CITY","MENS","HOSE","PIKE","GOES","PALM","MILD","JURY","JUAN","SUCK","NAVY","POOR","LETS","BOOK","ACRE","INFO","MESS","JUMP","LAWS","BEST","BOFA","PURE","BUCK","TAIL","LEGS","BIND","HOST","EYES","MILF","HANG","VERY","OVAL","WELL","LENS","OOPS","DIRT","RAIN","ONTO","VICE","HOME","DUTY","VOLT","GAIN","BEAR","DAVE","GEEK","SINK","BASS","DESK","POLE","LACK","NINE","KNEW","DUCK","BLOW","ZOOM","SLOW","SPOT","MEGA","RAID","BEND","DIVE","MOMS","GROW","VOID","HOLE","TIME","ENDS","THEY","SNAP","LOGS","FROG","CAST","YEAH","PAYS","SITE","EVIL","SWAP","OILS","GENE","BOAT","ICON","FELT","RUNS","PAGE","FOLD","PAIR","PINS","ATOM","WATT","PETS","RIDE","IRON","GRIP","STUD","HORN","SOUL","FLAG","FREE","WILL","CLIP","SPAN","NAIL","RARE","NUTS","JOKE","BARS","PADS","MOON","THAT","THIS","LOUD","BIOS","BAGS","JAZZ","WITH","RATS","FEAR","WEAR","DUAL","MINE","SEAT","BIAS","FOAM","POEM","CAPE","BIDS","ASKS","TOLL","BEAN","DELL","WHOM","SWIM","BIRD","DOGS","RISE","INNS","LADY","MATH","FANS","CUPS","PROS","ZERO","NULL","YOUR","KNEE","ROLL","PREP","FROM","HAVE","CENT","POND","LIPS","WIRE","MORE","TAPE","SPAM","HIDE","ACID","BATH","BARE","HUNG","RIPE","FAIL","KEPT","JEEP","PRAY","WARS","POPE","RELY","BETA","DRAG","FONT","ARMS","CHAD","TIRE","APPS","JOSH","TILE","BEAT","FLIP","BOOB","BOOB","WAIT","JUST","DOCS","KEYS","IRAN","EXIT","LIST","NAME","ROSE","WAVE","MESH","YEAR","SOFT","LYNN","ACTS","HOLY","WALK","FUEL","ROWS","OVER","MATT","CATS","DATE","FIND","KITS","HARM","THAN","BOMB","BACK","ARCH","UGLY","COIN","MENT","PICK","FAKE","SOIL","CURE","LACE","INTO","COLD","MOST","WORN","WORK","SEES","DOUG","LAST","FOLK","TRIO","CUBE","DENY","SHOT","LUNG","QUIT","DATA","USED","NEXT","EARS","MISS","FIST","TASK","DEAN","GODS","TALE","MART","WILD","HEAT","BOND","TAXI","MASS","FOOT","MERE","POLL","BULL","TONY","BENT","SNOW","LUKE","SAGE","TRAY","PETE","CAMP","ONLY","SLIM","ISLE","WHEN","MATE","DIED","KILL","INCH","CHEF","JEFF","LANE","FILL","NUKE","BOOM","CALM","PEAK","BUZZ","GONE","WHAT","FORT","EURO","GREG","NEWS","BELL","PENN","SALT","DICK","FORK","TROY","TIED","HERE","CAVE","BIKE","DIES","DROP","RICH","WERE","TRAP","FOOL","OVEN","SOME","LOSE","SEEK","LOAD","DEER","TAGS","LIKE","JAIL","GUYS","BEEN","ONES","GAVE","CAMS","ALSO","TITS","WOOL","RANK","JOEL","HELP","EYED","SEEM","VIEW","TONS","NOON","COOK","PLUG","GRAB","HIRE","AGES","PINK","HAWK","SHOW","EVEN","CORP","MIND","LOST","TOUR","SIZE","CODE","MENU","KENT","HELD","TEND","GULF","ADDS","PINE","LIME","AIMS","PULL","HOPE","EASY","DAME","DECK","BLUE","FINE","MOLD","BLAN","AXIS","HERB","ALOT","ROLE","SOAP","WISH","IDLE","LONG","CAME","TUBE","RAIL","STAR","DRUG","COPY","YANG","KING","PICS","MINT","OPEN","CASH","REID","BUSY","NICK","TONE","PLOT","HEEL","FLEX","MEAN","HUNT","TURN","LINK","SEAL","MUCH","SIGN","SOON","HAND","TINY","RICK","COVE","WING","WASH","FILE","NECK","PORN","SEEN","SPIN","STOP","PORT","KEEP","HOUR","BUSH","CLUB","EASE","RUSH","TEXT","CHAR","DOLL","RATE","MALE","FUND","DOCK","TABS","MODS","DUMB","MODE","DICE","ROAD","GIFT","WEED","TOOK","SELL","OWEN","BITE","CHIP","DOOM","WIKI","TOOL","IDEA","BODY","PERU","EAST","MYTH","SONG","FALL","LATE","HARD","BARN","FARE","BUTT","PUNK","WANT","PACE","AREA","DUKE","MOVE","GUNS","BELT","BALD","HUGE","KIND","HERO","LOGO","WAGE","BOLT","TAKE","WENT","DAWN","FOUR","CARL","COAT","SPAS","HINT","LEAD","SHOP","PORK","NICE","GRID","BUYS","BAND","ECHO","SENT","STAY","TECH","GRAD","LEAF","PEER","MEET","OURS","BOTH","LEVY","PAST","UNIT","FACT","EDIT","AUTO","PLUS","UPON","FIVE","BRAS","FAST","SONS","GURU","GOLD","KISS","PIPE","RISK","CUBA","TOWN","MEAT","SILK","BOLD","ARTS","BANK","SCAN","ZINC","URGE","LIES","IDOL","FEEL","STAN","TIPS","CUTE","GAPS","WISE","WORD","ODDS","BILL","WARD","SEED","LAID","DOWN","NEST","CLAY","WEAK","TEAR","EVER","CARE","TALK","PALE","MARK","ELSE","SOLE","BULK","ROCK","ROOF","AGED","SAYS","LAND","NEON","DONE","GALE","GAME","TRUE","KIDS","NUDE","OWNS","CHAT","FIRE","CORK","MILL","CUTS","PENS","MARS","SAME","HEAD","GATE","ONCE","MATS","SLIP","DEAF","AWAY","CELL","SELF","WORM","LOSS","HASH","LAZY","PILL","CASE","FRED","WOOD","BABY","META","NEAR","BASE","DOME","COPE","FACE","FILM","CARB","PUMP","TERM","CAPS","ANNE","SONY","WIDE","TELL","LOAN","LABS","KEEN","CARS","BANG","ALEX","RYAN","PEAS","GIRL","ABLE","GREY","TOYS","GOLF","WOLF","URLS","BEDS","SORT","BONE","MIME","NONE","MEAL","PAUL","BLAH","MOSS","HURT","LAKE","KICK","FITS","EXAM","SURE","HALF","STEP","BUGS","BURN","SUIT","QUAD","LAMP","IRAQ","CAGE","SHOE","DASH","BOYS","OAKS","KNIT","REST","HUGH","FORM","MAIL","DEEP","PLAN","WAYS","LION","ALAN","LOOP","CROP","SICK","CAKE","TOLD","RICE","TALL","DIAL","FOOD","CULT","RULE","DEAR","GORE","VOTE","SKIN","CARD","HATE","LAMB","JANE","FELL","MUST","WALL","THOU","TREE","YORK","THUS","RAGE","MINI","BEER","FLUX","COAL","REAL","PING","WINE","SEAS","ITEM","YARD","COST","LUCK","MASK","POOL","FULL","SANS","SURF","YARN","MILK","HOOK","JAVA","LEAN","LIFE","ASIA","KNOW","POET","ROSS","USES","WEST","RING","MARY","PASS","ROOM","GARY","FEES","SAKE","BOSS","EPIC","FOUL","TEEN","JOIN","ARAB","CORD","ROME","JADE","VARY","HATS","DUDE","NOTE","LIVE","JUNK","DOOR","GOTO","WEEK","SOLO","JUNE","FEET","ALTO","DOSE","SEXY","NORM","PART","NEIL","LEFT","BEEF","TEAM","DAYS","LOOK","BOOT","SALE","WARE","PUSH","LUCY","COOL","GANG","PHIL","JOBS","MANY","WRAP","FEED","MOOD","BLOG","QUIZ","LESS","GLAD","SOFA","NEED","VAST","SAFE","JOHN","JILL","WAKE","WINS","TWIN","GOAT","GLOW","HALO","GAYS","FEAT","DONT","USER","EXEC","GRAY","POUR","SAID","MAUI","SAIL","TYPE","TILL","TION","DRUM","CALL","REED","JETS","SING","DUST","YALE","YOGA","VIDS","SETS","MICE","GIVE","TEMP","BETH","CHAN","SIDE","BITS","PARK","SEND","HOLD","DEAL","CORE","MAIN","DEBT","MAPS","HILL","DANA","SHIP","SEGA","THIN","CART","DOES","ANDY","SAND","DARE","DEMO","NOVA","DEPT","RAYS","HACK","PAID","COME","RACK","SEMI","PRIX","ANAL","JULY","MADE","FISH","SHUT","CONF","HAIR","EARN","LOVE","TEST","PLAY","PACK","BORN","LITE","ACNE","TOPS","RACE","LIBS","HALL","BEAM","LINE","CAFE","WALT","UNDO","SAVE","POSE","TENT"};
@@ -143,7 +143,9 @@ public class PlutoScript : MonoBehaviour { //depends on name
     }
 
     bool SoundsMatch () {
-        if ((sliderSFX[sliderStates[0]] == sliderSFX[3+sliderStates[1]] && sliderSFX[6+sliderStates[2]] == sliderSFX[9+sliderStates[3]]) && (sliderSFX[3+sliderStates[1]] == sliderSFX[6+sliderStates[2]])) {
+        if ((sliderSFX[sliderStates[0]] == sliderSFX[3+sliderStates[1]] && 
+            sliderSFX[6+sliderStates[2]] == sliderSFX[9+sliderStates[3]]) && 
+            (sliderSFX[3+sliderStates[1]] == sliderSFX[6+sliderStates[2]])) {
             return true;
         }
         return false;
@@ -198,6 +200,7 @@ public class PlutoScript : MonoBehaviour { //depends on name
                     IndivAsteroidObjs[i].SetActive(false);
                     StartCoroutine(ShowLetter(i, asteroidsDestroyed));
                     asteroidsDestroyed += 1;
+                    destroyed[i] = true;
                 } else if (asteroidsDestroyed != 0 && ((int)Bomb.GetTime()%2 != validTime%2)) {
                     switch (asteroidsDestroyed) {
                         case 1: Debug.LogFormat("[Pluto #{0}] Second asteroid destroyed successfully.", moduleId); break;
@@ -207,6 +210,7 @@ public class PlutoScript : MonoBehaviour { //depends on name
                     IndivAsteroidObjs[i].SetActive(false);
                     StartCoroutine(ShowLetter(i, asteroidsDestroyed));
                     asteroidsDestroyed += 1;
+                    destroyed[i] = true;
                 } else {
                     GetComponent<KMBombModule>().HandleStrike();
                     Audio.PlaySoundAtTransform("fuck", transform);
@@ -295,18 +299,159 @@ public class PlutoScript : MonoBehaviour { //depends on name
     }
 
     private IEnumerator HidePlanet() {
-        if (!moduleSolved && !isAnimating) {
+        if (!isAnimating) {
             isAnimating = true;
             yield return Ut.Animation(0.5f, d => Background.transform.transform.transform.transform.transform.transform.transform.localScale = new Vector3(1, Mathf.Lerp(1, 10, d), 1));
             visible = !visible;
             if (theGoblinsWereAwakened)
                 AsteroidsObj.SetActive(visible);
-            Planet.SetActive(visible);
+            if (!moduleSolved)
+                Planet.SetActive(visible);
             yield return Ut.Animation(0.5f, d => Background.transform.transform.transform.transform.transform.transform.transform.transform.localScale = new Vector3(1, Mathf.Lerp(10, 1, d), 1));
             Debug.LogFormat("<Pluto #{0}> Visible toggled to {1}.", moduleId, visible);
             isAnimating = false;
         }
         yield return null;
     }
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = 
+        "Use <!{0} start> to toggle the PVP. Use <!{0} cycle [1-4]> to cycle that slider. If no number is given, all sliders will be cycled. Use <!{0} set [1-4] [1-3]> to set that slider to that position. Use <!{0} set # # # #> to set the sliders to those positions in order.\n" +
+        "Use <!{0} destroy at 9> to destroy an asteroid when the last timer digit is a 9. Use <!{0} destroy all even/odd> to destroy the rest of the asteroids on the specified parity. Use <!{0} colorblind> to hover over the asteroids\n" +
+        "Use <!{0} submit at ##> to press Pluto when the last timer digits are ##. Use <!{0} hide> to press the hide button.";
+#pragma warning restore 414
 
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        command = command.Trim().ToUpperInvariant();
+        Match mCycle = Regex.Match(command, @"^CYCLE(?:\s+|$)([1-4])?$");
+        Match mSet = Regex.Match(command, @"^SET\s+([1-4])\s+([1-3])$");
+        Match mSetAll = Regex.Match(command, @"^SET\s+(?:ALL\s+)?([1-3])\s*([1-3])\s*([1-3])\s*([1-3])$");
+        Match mDestroyOne = Regex.Match(command, @"^DESTROY\s+(?:(?:AT|ON)\s+)?([0-9])$");
+        Match mDestroyAll = Regex.Match(command, @"^DESTROY\s+(?:ALL|REST)\s+(?:(?:AT|ON)\s+)?(EVEN|ODD)$");
+        Match mColorblind = Regex.Match(command, @"^(?:COLOU?R-?BLIND|CB)$");
+        Match mSubmit = Regex.Match(command, @"^SUBMIT\s+(?:(?:AT|ON)\s+)?([0-5][0-9])$");
+        if (command == "HIDE")
+        {
+            yield return null;
+            HideButton.OnInteract();
+        }
+        else if (command == "START")
+        {
+            yield return null;
+            PVPbutton.OnInteract();
+        }
+        else if (mCycle.Success && PVPvisible)
+        {
+            yield return null;
+            yield return "trycancel Cancel culture strikes again...";
+            if (mCycle.Groups[1].Length == 0)
+                for (int i = 0; i < 4; i++)
+                {
+                    yield return Cycle(i);
+                    yield return new WaitForSeconds(0.5f);
+                }
+            else
+                yield return Cycle(mCycle.Groups[1].Value[0] - '1');
+        }
+        else if (mSet.Success && PVPvisible)
+        {
+            yield return null;
+            yield return SetSlider(mSet.Groups[1].Value[0] - '1', mSet.Groups[2].Value[0] - '1');
+        }
+        else if (mSetAll.Success && PVPvisible)
+        {
+            yield return null;
+            for (int i = 0; i < 4; i++)
+                yield return SetSlider(i, mSetAll.Groups[i + 1].Value[0] - '1');
+        }
+        else if (mDestroyOne.Success && visible && theGoblinsWereAwakened)
+        {
+            yield return null;
+            int pressTime = mDestroyOne.Groups[1].Value[0] - '0';
+            yield return DestroySingle(pressTime);
+        }
+        else if (mDestroyAll.Success && visible && theGoblinsWereAwakened)
+        {
+            int parity = mDestroyAll.Groups[1].Value == "EVEN" ? 0 : 1;
+            for (int i = 0; i < 4; i++)
+            {
+                if (!destroyed[i])
+                {
+                    while ((int)Bomb.GetTime() % 2 != parity)
+                        yield return "trycancel Cancel culture strikes again...";
+                    yield return Ut.Press(Asteroids[i], 1.1f);
+                }
+                    
+            }
+        }
+        else if (mColorblind.Success)
+        {
+            for (int i = 0; i < 4; i++)
+                if (!destroyed[i])
+                {
+                    Asteroids[i].OnHighlight();
+                    yield return "trycancel Cancel culture strikes again...";
+                    yield return new WaitForSeconds(1);
+                }
+        }
+        else if (mSubmit.Success)
+        {
+            int submitTime = int.Parse(mSubmit.Groups[1].Value);
+            while ((int)Bomb.GetTime() % 60 != submitTime)
+                yield return "trycancel Cancel culture strikes again...";
+            Pluto.OnInteract();
+        }
+    }
+    IEnumerator Cycle(int sliderIx)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            yield return new WaitForSeconds(1);
+            PVPsliders[sliderIx].OnInteract();
+        }
+    }
+    IEnumerator SetSlider(int sliderIx, int pos)
+    {
+        while (sliderStates[sliderIx] != pos)
+            yield return Ut.Press(PVPsliders[sliderIx], 0.33f);
+    }
+    IEnumerator DestroySingle(int time)
+    {
+        int pressIx = Enumerable.Range(0, 4).First(x => !destroyed[x]);
+        while ((int)Bomb.GetTime() % 10 != time)
+            yield return "trycancel Cancel culture strikes again...";
+        Asteroids[pressIx].OnInteract();
+    }
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (!visible)
+        {
+            HideButton.OnInteract();
+            while (isAnimating)
+                yield return true;
+        }
+        if (!theGoblinsWereAwakened)
+            yield return Ut.Press(PVPbutton, 0.33f);
+        for (int s = 0; s < 4; s++)
+            yield return SetSlider(s, Array.IndexOf(sliderSFX.Skip(3 * s).Take(3).ToArray(), chosenSound));
+        if (asteroidsDestroyed == 0)
+        {
+            while ((int)Bomb.GetTime() % 10 != validTime)
+                yield return true;
+            yield return Ut.Press(Asteroids[0], 0.25f);
+        }
+        int parity = validTime % 2 == 0 ? 1 : 0;
+        for (int ast = 0; ast < 4; ast++)
+        {
+            if (!destroyed[ast])
+            {
+                while ((int)Bomb.GetTime() % 2 != parity)
+                    yield return true;
+                yield return Ut.Press(Asteroids[ast], 0.25f);
+            }
+        }
+        while ((int)Bomb.GetTime() % 60 != finalAnswer)
+            yield return true;
+        Pluto.OnInteract();
+    }
 }
