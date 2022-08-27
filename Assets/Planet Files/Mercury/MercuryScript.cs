@@ -290,8 +290,8 @@ public class MercuryScript : MonoBehaviour { //depends on name
     }
     IEnumerator Move(int from, int to)
     {
-        yield return Ut.Press(Tubes[from], 0.15f);
-        yield return Ut.Press(Tubes[to],   0.15f);
+        yield return Ut.Press(Tubes[from], 0.1f);
+        yield return Ut.Press(Tubes[to],   0.1f);
         presses += 2;
     }
 }
