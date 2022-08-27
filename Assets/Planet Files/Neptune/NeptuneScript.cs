@@ -291,4 +291,36 @@ public class NeptuneScript : MonoBehaviour { //depends on name
         GetComponent<KMBombModule>().HandlePass();
         Debug.LogFormat("[Neptune #{0}] All enemies manipulated, module solved.", moduleId);
     }
+
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"Use <!{0} URDLS> to press the up, right, down, left, then submit (center) buttons. Use <!{0} move ULRD> to move up, left, right, then down. Use !{0} hide to press the hide button.";
+#pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        command = command.Trim().ToUpperInvariant();
+        Match m = Regex.Match(command, @"^(?:PRESS\s+)?((?:[SULRD]\s*)+)$");
+        const string dirs = "SULRD";
+        if (command == "HIDE")
+        {
+            yield return null;
+            HideButton.OnInteract();
+        }
+        else if (m.Success && visible)
+        {
+            yield return null;
+            foreach (char ch in m.Groups[1].Value.Where(ch => dirs.Contains(ch)))
+                yield return Ut.Press(PlanetButtons[dirs.IndexOf(ch)], 0.25f);
+        }
+    }
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        if (!visible)
+        {
+            HideButton.OnInteract();
+            while (isAnimating)
+                yield return true;
+        }
+        yield return null;
+    }
 }
