@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using KModkit;
+using System.Text.RegularExpressions;
 
 public class UranusModuleScript : MonoBehaviour
 { 
@@ -246,67 +247,91 @@ public class UranusModuleScript : MonoBehaviour
                     Background.localScale = new Vector3(1, Mathf.Lerp(18, 1, d), 1));
         isAnimating = false;
     }
+    string[] FindPath(PositionData start)
+    {
+        if (start.score == targetValue)
+            return new List<string>();
+        Queue<PositionData> q = new Queue<PositionData>();
+        List<Movement> allMoves = new List<Movement>();
+        q.Enqueue(start);
+        while (q.Count > 0)
+        {
+            PositionData cur = q.Dequeue();
+            foreach (KeyValuePair<string, int> adj in GetAdjacents(cur.cell))
+            {
+                if (adj.Value != cur.prevCell)
+                {
+                    int newScore = cur.moves % 2 == 0 ? cur.score + ValueTable[adj.Value] : cur.score - ValueTable[adj.Value];
+                    PositionData next = new PositionData { cell = adj.Value, prevCell = cur.cell, score = newScore, moves = cur.moves + 1 };
+                    q.Enqueue(next);
+                    allMoves.Add(new Movement { start = cur, end = next, direction = adj.Key } );
+                }
+            }
+            if (cur.score == targetValue)
+            {
+                Debug.Log("Found end!");
+                break;
+            }
+        }
+        Movement lastMove = allMoves.First(x => x.end.score == targetValue);
+        List<Movement> path = new List<Movement>() { lastMove };
+        while (!lastMove.start.Equals(start))
+        {
+            lastMove = allMoves.First(x => x.end.Equals(lastMove.start));
+            path.Add(lastMove);
+        }
+        path.Reverse();
+        return path.Select(x => x.direction).ToArray();
+    }
+    struct PositionData
+    {
+        public int cell, prevCell, score, moves;
+    }
+    struct Movement
+    {
+        public PositionData start, end;
+        public string direction;
+    }
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"Use !{0} move N NE E SE S SW W NW to move in those directions. Use !{0} hide to press the hide button.";
+    private readonly string TwitchHelpMessage = @"Use !{0} move N NE E SE S SW W NW to move in those directions. Use !{0} hide to press the hide button and reset the module.";
 #pragma warning restore 414
 
-    IEnumerator ProcessTwitchCommand(string input)
+    IEnumerator MoveDirs(string[] dirs)
     {
-        string Command = input.Trim().ToUpperInvariant();
-        List<string> parameters = Command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        int[][] pairs = new int[][] { new int[] { 2, 0 }, new int[] { 2, 3 }, new int[] { 1, 3 }, new int[] { 0, 3 }, new int[] { 0, 2 }, new int[] { 0, 1 }, new int[] { 3, 1 }, new int[] { 3, 0 } };
-        if (parameters.First() != "MOVE")
-            yield break;
-        parameters.Remove("MOVE");
-        if (parameters.Any(x => !directions.Contains(x)))
-            yield break;
-        yield return null;
-        foreach (string direction in parameters)
+        foreach (string direction in dirs)
         {
+            int[][] pairs = new int[][] { new int[] { 2, 0 }, new int[] { 2, 3 }, new int[] { 1, 3 }, new int[] { 0, 3 }, new int[] { 0, 2 }, new int[] { 0, 1 }, new int[] { 3, 1 }, new int[] { 3, 0 } };
             int[] action = pairs[Array.IndexOf(directions, direction)];
             PlanetButtons[action[0]].OnInteract();
             PlanetButtons[action[1]].OnInteractEnded();
             yield return new WaitForSeconds(0.4f);
         }
     }
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        command = command.Trim().ToUpperInvariant();
+        Match m = Regex.Match(command, @"^(?:MOVE\s+)?((?:[NESW][NESW]?\s*)+)$");
+        if (command == "HIDE" || command == "RESET")
+        {
+            yield return null;
+            HideButton.OnInteract();
+        }
+        else if (m.Success)
+        {
+            yield return null;
+            yield return MoveDirs(m.Groups[1].Value.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
     
     IEnumerator TwitchHandleForcedSolve()
     {
-        int attempts = 0;
-        solving:
-        int cap = attempts / 200 + 10;
-        int virtualCurrentCell = currentPosition;
-        int virtualCurrentValue = currentValue;
-        int virtualMoveCounter = 0;
-        List<string> path = new List<string>();
-        int virtualPrev = previousCell;
-        while (virtualCurrentValue != targetValue)
+        if (!visible)
         {
-            KeyValuePair<string, int> move = GetAdjacents(virtualCurrentCell).Where(x => x.Value != virtualPrev).PickRandom();
-            path.Add(move.Key);
-            virtualPrev = virtualCurrentCell;
-            virtualCurrentCell = move.Value;
-            virtualCurrentValue += (virtualMoveCounter % 2 == 0) ? ValueTable[virtualCurrentCell] : -1 * ValueTable[virtualCurrentCell];
-            virtualMoveCounter++;
-            attempts++;
+            HideButton.OnInteract();
+            while (isAnimating)
+                yield return true;
         }
-        Debug.Log("End value: " + virtualCurrentValue);
-        if (attempts > 200)
-        {
-            attempts = 0;
-            cap++;
-        }
-        if (path.Count > cap)
-        {
-            goto solving;
-        }
-        int[][] pairs = new int[][] { new int[] { 2, 0 }, new int[] { 2, 3 }, new int[] { 1, 3 }, new int[] { 0, 3 }, new int[] { 0, 2 }, new int[] { 0, 1 }, new int[] { 3, 1 }, new int[] { 3, 0 } };
-        foreach (string movement in path)
-        {
-            int[] action = pairs[Array.IndexOf(directions, movement)];
-            PlanetButtons[action[0]].OnInteract();
-            PlanetButtons[action[1]].OnInteractEnded();
-            yield return new WaitForSeconds(0.4f);
-        }
+        string[] path = FindPath(new PositionData { cell = currentPosition, score = currentValue, prevCell = previousCell, moves = moveCounter });
+        yield return MoveDirs(path);
     }
 }
