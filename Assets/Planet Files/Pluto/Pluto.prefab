@@ -3898,7 +3898,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ModuleType: pluto
   ModuleDisplayName: Pluto
-  RequiresTimerVisibility: 0
+  RequiresTimerVisibility: 1
 --- !u!114 &114894813388064012
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -737,7 +737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ModuleType: jupiter
   ModuleDisplayName: Jupiter
-  RequiresTimerVisibility: 0
+  RequiresTimerVisibility: 1
 --- !u!114 &114907837735438752
 MonoBehaviour:
   m_ObjectHideFlags: 1

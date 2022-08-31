@@ -103,6 +103,8 @@ public class PlutoScript : MonoBehaviour { //depends on name
             }
         }
 
+        Debug.LogFormat("[Pluto #{0}] Sounds: {1}, {2}, {3} / {4}, {5}, {6} / {7}, {8}, {9} / {10}, {11}, {12}", 
+        moduleId, sliderSFX[0], sliderSFX[1], sliderSFX[2], sliderSFX[3], sliderSFX[4], sliderSFX[5], sliderSFX[6], sliderSFX[7], sliderSFX[8], sliderSFX[9], sliderSFX[10], sliderSFX[11]); //sorry
         GridShit();
         chosenWord = fourLetterWords.PickRandom();
         Debug.LogFormat("[Pluto #{0}] Chosen word is {1}.", moduleId, chosenWord);
