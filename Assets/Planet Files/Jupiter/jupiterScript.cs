@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using KModkit;
 
 /*******************************************************************************************
 The original version of the code was created by Blananas2 in its entirety on March 3rd 2022.
-See Jupiter.cs if you're curious what the first version of the source code looked like.
+See Jupiter.txt if you're curious what the first version of the source code looked like.
 *******************************************************************************************/
 
 public class jupiterScript : MonoBehaviour { 
@@ -69,7 +69,7 @@ public class jupiterScript : MonoBehaviour {
         }
 
 		BeginCalculation();
-		sl.transform.rotation = Quaternion.identity;
+		sl.transform.rotation = Quaternion.Euler(0, 0, sl.transform.rotation.eulerAngles.z);
     }
 
 	void BeginCalculation () {
