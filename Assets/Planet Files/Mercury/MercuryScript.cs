@@ -68,7 +68,7 @@ public class MercuryScript : MonoBehaviour { //depends on name
         {
             solutionBalls[tubeIx] = new Stack<int>(currentBalls[tubeIx]);
             List<int> orderedBalls = currentBalls[tubeIx].ToList();
-//            orderedBalls.Reverse();
+            //orderedBalls.Reverse();
             for (int slotIx = 0; slotIx < 5; slotIx++)
                 PaperSprites[5 * tubeIx + slotIx].sprite = slotIx >= orderedBalls.Count ? null : PaperBalls[orderedBalls[slotIx]];
         }

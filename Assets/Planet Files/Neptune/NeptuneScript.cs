@@ -121,7 +121,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
     }
 
     int LettersToRNG (Value v) {
-        return v.A*10000 + v.B*1000 + v.C*100 + v.C*10 + v.E;
+        return v.A*10000 + v.B*1000 + v.C*100 + v.D*10 + v.E;
     }
 
     private IEnumerator Rotation() {
@@ -287,7 +287,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"Use <!{0} URDLS> to press the up, right, down, left, then submit (center) buttons. Use <!{0} move ULRD> to move up, left, right, then down. Use !{0} hide to press the hide button.";
+    private readonly string TwitchHelpMessage = @"Use <!{0} URDLS> to press the up, right, down, left, then submit (center) buttons. Use !{0} hide to press the hide button.";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string command)
