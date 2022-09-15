@@ -141,8 +141,8 @@ public class VenusScript : MonoBehaviour { //depends on name
                     GeneratePuzzle();
                 } else if (!Animating && ButtonIsValid(i)) {
                     string b = colors[current];
-                    int[] xVals = new int[] { 1, 0, 0, -1 };
-                    int[] zVals = new int[] { 0, 1, -1, 0 };
+                    //int[] xVals = new int[] { 1, 0, 0, -1 };
+                    //int[] zVals = new int[] { 0, 1, -1, 0 };
                     current = MoveFrom(current, dirs[i]);
                     Debug.Log("<Venus> current = " + current);
                     Debug.LogFormat("[Venus #{0}] You went {1} from {2}, now you're at {3}.", moduleId, directionNames[i], b, colors[current]);

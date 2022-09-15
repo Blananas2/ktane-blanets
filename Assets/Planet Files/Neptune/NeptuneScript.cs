@@ -164,7 +164,6 @@ public class NeptuneScript : MonoBehaviour { //depends on name
                         Debug.LogFormat("[Neptune #{0}] {1} manipulated with {2}.", moduleId, NeptuneData.Enemies[usedStar][stage], RNG.ToString("00000"));
                         stage += 1;
                         Coins[coinCount - stage].SetActive(false);
-                        bool f = false;
                         bannedRNGvalues.Add(v);
                         if (coinCount == stage) {
                             moduleSolved = true;
