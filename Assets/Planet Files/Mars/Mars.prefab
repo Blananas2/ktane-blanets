@@ -774,14 +774,9 @@ MonoBehaviour:
   Parent: {fileID: 0}
   Children:
   - {fileID: 114619631916584806}
-  - {fileID: 0}
   - {fileID: 114724162645856444}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   IsPassThrough: 0
-  ChildRowLength: 0
+  ChildRowLength: 1
   Highlight: {fileID: 114570430299588062}
   SelectableColliders: []
   DefaultSelectableIndex: 0
