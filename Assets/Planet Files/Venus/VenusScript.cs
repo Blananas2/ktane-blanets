@@ -271,11 +271,12 @@ public class VenusScript : MonoBehaviour { //depends on name
         else if (m.Success && Started && visible)
         {
             yield return null;
-            foreach (char dir in m.Groups[1].Value.Where(ch => "ULRD".Contains(ch)))
+            foreach (char dir in m.Groups[1].Value.Where(ch => !char.IsWhiteSpace(ch)))
             {
                 yield return new WaitUntil(() => !isAnimating);
                 yield return new WaitForSeconds(0.2f);
                 PlanetButtons[dirs.IndexOf(dir)].OnInteract();
+                yield return new WaitForSeconds(0.1f);
             }
         }
     }

@@ -21,6 +21,6 @@ MonoBehaviour:
     Module by TasThiluna\n\u2643: Module by Deaf, Reimplemented by Blan\r\n\u2644:
     Module by eXish\r\n\u2645: Module by tandyCake\r\n\u2646: Module by Blan, Help
     by tandyCake and Quinn Wuest\n\u2647: Idea by Fish, Implemented by Blan"
-  version: 1.0
+  version: 2.1.3
   outputFolder: build
   previewImage: {fileID: 2800000, guid: ee59b91033715eb4cac2aa6cba7f3fcc, type: 3}
