@@ -272,6 +272,7 @@ public class NeptuneScript : MonoBehaviour { //depends on name
             case "Uk": return (v.B == v.D && v.C == v.E && v.D != v.E);
             case "Wg": return ((v.A*10+v.B) == (v.E*10+v.D));
         }
+        Debug.LogFormat("[Neptune #{0}] BUG FOUND! I don't recognize enemy '{1}', report to Blan!", moduleId, enemy);
         return false;
     }
 
