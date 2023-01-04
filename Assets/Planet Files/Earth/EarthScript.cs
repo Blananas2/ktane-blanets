@@ -332,7 +332,7 @@ public class EarthScript : MonoBehaviour { //depends on name
         public int pressed;
     }
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"Use <!{0} US MX CA> to press the spheres corresponding to the US, Mexico, and Canada. Hover over circles in the TP manual for this to see their country codes. Use <!{0} hide> to hide the planet.";
+    private readonly string TwitchHelpMessage = @"Use <!{0} US MX CA> to press the spheres corresponding to the US, Mexico, and Canada. Press 'Toggle Codes' in the manual to see their country codes. Use <!{0} hide> to hide the planet.";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string command)
@@ -343,6 +343,7 @@ public class EarthScript : MonoBehaviour { //depends on name
         {
             yield return null;
             HideButton.OnInteract();
+             HideButton.OnInteractEnded();
         }
         else if (m.Success && visible)
         {
