@@ -1,4 +1,4 @@
-﻿public class NeptuneData
+public class NeptuneData
 {
     static public string[] Stars = {
         "BOB 1    ", "BOB 2    ", "BOB 3    ", "BOB 4    ", "BOB 5    ", "BOB 6    ", "BOB  100C", 
@@ -79,7 +79,7 @@
         
         new string[0]{}, //↘ Ø ↗
         new string[2]{"Cl", "Ee"},
-        new string[0]{}, //↙ N/A ↖
+        new string[2]{"Cl", "G"},
         new string[1]{"Cl"},
         new string[0]{}, //↘ Ø ↗
         new string[2]{"Cl", "G"},
@@ -203,7 +203,7 @@
     static public bool[] HasEnemies = {
         true,  true,  true,  true,  true,  true,  true,  
         true,  true,  false, true,  true,  false, true,  
-        false, true,  false, true,  false, true,  true,  
+        false, true,  true, true,  false, true,  true,  
         false, true,  true,  true,  true,  true,  false, 
         true,  true,  true,  true,  true,  true,  true,  
         true,  true,  true,  true,  true,  false, true,  
@@ -221,7 +221,7 @@
         true,  false, true    
     };
 
-    static public int[] NoEnemies = { 9, 12, 14, 16, 18, 21, 27, 40, 44, 45, 46, 50, 51, 54, 56, 58, 59, 61, 62, 70, 79, 80, 81, 82, 88,  93, 96, 105, 106, 108, 110, 111, 114, 115, 116, 118 };
-     static public int[] OddArrow = { 1, 11, 22, 22, 26, 22, 26, 48, 65, 53, 53, 49, 57, 60, 64, 66, 65, 67, 60, 64, 78, 74, 74, 75, 74, 100, 97, 107, 107, 109, 109, 109, 113, 113, 113, 117 };
-    static public int[] EvenArrow = { 8,  6,  8,  8,  6, 29, 34, 33, 52, 52, 52, 52, 52, 55, 63, 52, 62, 55, 55, 77, 86, 86, 89, 89, 89, 101, 89, 107, 107, 107, 109, 109, 113, 113, 113, 119 };
+    static public int[] NoEnemies = { 9, 12, 14, 18, 21, 27, 40, 44, 45, 46, 50, 51, 54, 56, 58, 59, 61, 62, 70, 79, 80, 81, 82, 88,  93, 96, 105, 106, 108, 110, 111, 114, 115, 116, 118 };
+     static public int[] OddArrow = { 1, 11, 22, 26, 22, 26, 48, 65, 53, 53, 49, 57, 60, 64, 66, 65, 67, 60, 64, 78, 74, 74, 75, 74, 100, 97, 107, 107, 109, 109, 109, 113, 113, 113, 117 };
+    static public int[] EvenArrow = { 8,  6,  8,  6, 29, 34, 33, 52, 52, 52, 52, 52, 55, 63, 52, 62, 55, 55, 77, 86, 86, 89, 89, 89, 101, 89, 107, 107, 107, 109, 109, 113, 113, 113, 119 };
 }
