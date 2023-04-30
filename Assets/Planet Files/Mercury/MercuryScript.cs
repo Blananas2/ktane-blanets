@@ -32,6 +32,9 @@ public class MercuryScript : MonoBehaviour { //depends on name
     int heldBall = -1;
     string colorNames = "cmykw";
 
+    private MercurySettings Settings = new MercurySettings();
+    int numberOfBalls = 10;
+
     //Logging
     static int moduleIdCounter = 1;
     int moduleId;
@@ -39,6 +42,19 @@ public class MercuryScript : MonoBehaviour { //depends on name
 
     void Awake () {
         moduleId = moduleIdCounter++;
+
+        ModConfig<MercurySettings> modConfig = new ModConfig<MercurySettings>("MercurySettings");
+        //Read from the settings file, or create one if one doesn't exist
+        Settings = modConfig.Settings;
+        //Update the settings file incase there was an error during read
+        modConfig.Settings = Settings;
+
+        numberOfBalls = Settings.TotalBalls;
+        if (numberOfBalls < 5 || numberOfBalls > 24) {
+            Debug.LogFormat("<Mercury #{0}> Do not make the number of balls less than 5 nor greater than 24.", moduleId);
+            numberOfBalls = 10;
+        }
+        Debug.LogFormat("<Mercury #{0}> Number of balls: {1}", moduleId, numberOfBalls);
 
         foreach (KMSelectable Tube in Tubes) {
             Tube.OnInteract += delegate () { TubePress(Tube); return false; };
@@ -55,7 +71,7 @@ public class MercuryScript : MonoBehaviour { //depends on name
     }
 
     void GeneratePuzzle() {
-        for (int b = 0; b < 10; b++) { //generate random ball structure
+        for (int b = 0; b < numberOfBalls; b++) { //generate random ball structure
             int c = Rnd.Range(0, 5);
             int p;
             do p = Rnd.Range(0, 5);
@@ -300,4 +316,25 @@ public class MercuryScript : MonoBehaviour { //depends on name
         yield return Ut.Press(Tubes[to],   0.1f);
         presses += 2;
     }
+
+    class MercurySettings
+    {
+        public int TotalBalls = 10;
+    }
+
+    static Dictionary<string, object>[] TweaksEditorSettings = new Dictionary<string, object>[]
+    {
+        new Dictionary<string, object>
+        {
+            { "Filename", "Mercury.json" },
+            { "Name", "Mercury Settings" },
+            { "Listing", new List<Dictionary<string, object>>{
+                new Dictionary<string, object>
+                {
+                    { "Key", "TotalBalls" },
+                    { "Text", "Number of balls the module will have. Range 5-24 inclusive." }
+                }
+            } }
+        }
+    };
 }

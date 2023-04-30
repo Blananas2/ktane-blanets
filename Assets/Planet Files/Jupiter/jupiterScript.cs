@@ -88,7 +88,7 @@ public class jupiterScript : MonoBehaviour {
 
 		RotationAmount = Random.Range(0, 4);
 		StatusLightPosition.transform.localEulerAngles += new Vector3(0, (float) (90 * RotationAmount), 0);
-		string[] RotNames = { "top right", "bottom right", "bottom left", "top left" };
+		string[] RotNames = { "top-right", "bottom-right", "bottom-left", "top-left" };
 		Debug.LogFormat("[Jupiter #{0}] The status light is {1}.", moduleId, RotNames[RotationAmount]);
 
 		Debug.LogFormat("[Jupiter #{0}] Starting number is {1}.", moduleId, CurrentNumber);
@@ -126,6 +126,7 @@ public class jupiterScript : MonoBehaviour {
 			break; 
 		}
 		Debug.LogFormat("[Jupiter #{0}] After going to node #{1} {2}, the number is now {3}.", moduleId, n + 1, NodeDesc[n], CurrentNumber);
+		Debug.LogFormat("<Jupiter #{0}> Ruleset for #{1} {2}: {3}", moduleId, n + 1, NodeDesc[n], Ruleset.Join(", "));
 
 		int po = PreviousOrbital;
 		int pc = PreviousConnector;
@@ -236,6 +237,7 @@ public class jupiterScript : MonoBehaviour {
 			break;
 		}
 		Debug.LogFormat("[Jupiter #{0}] After going to node #{1} {2}, the number is now {3}.", moduleId, n + 1, NodeDesc[n], CurrentNumber);
+		Debug.LogFormat("<Jupiter #{0}> Ruleset for #{1} {2}: {3}", moduleId, n + 1, NodeDesc[n], Ruleset.Join(", "));
 
 		int pc = PreviousConnector;
 
@@ -364,6 +366,7 @@ public class jupiterScript : MonoBehaviour {
 			break;
 		}
 		Debug.LogFormat("[Jupiter #{0}] After going to node #{1} {2}, the number is now {3}.", moduleId, n + 1, NodeDesc[n], CurrentNumber);
+		Debug.LogFormat("<Jupiter #{0}> Ruleset for #{1} {2}: {3}", moduleId, n + 1, NodeDesc[n], Ruleset.Join(", "));
 
 		int ps = PreviousStandard;
 
@@ -436,8 +439,7 @@ public class jupiterScript : MonoBehaviour {
 			case 'H': return RotationAmount % 3 != 0; //The status light is on the bottom half of the module.
 			case 'I': return India.Contains(VisitedNodes); //If this is the 2nd, 4th, 7th, 10th, or 11th node visited.
 			case 'J': return Juliett.Contains(VisitedNodes); //If this is the 1st, 3rd, 5th, 6th, or 8th node visited.
-			case 'K': return ((VisitedNodes == 9) | (Kilo.Contains(CurrentNode))); //If this is either the 9th node visited, or the previous node visited was either red, green, or blue.
-			                                 //yes I know, it says CurrentNode above, this code operates in weird ways tbh.
+			case 'K': return ((VisitedNodes == 9) || (Kilo.Contains(PreviousNode))); //If this is either the 9th node visited, or the previous node visited was either red, green, or blue.
 		}
 		return false;
 	}
