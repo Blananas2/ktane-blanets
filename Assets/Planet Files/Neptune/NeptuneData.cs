@@ -1,4 +1,4 @@
-public class NeptuneData
+﻿public class NeptuneData
 {
     static public string[] Stars = {
         "BOB 1    ", "BOB 2    ", "BOB 3    ", "BOB 4    ", "BOB 5    ", "BOB 6    ", "BOB  100C", 
