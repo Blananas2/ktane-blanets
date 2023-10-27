@@ -36,7 +36,7 @@ public class mars : MonoBehaviour
     private static readonly float[] endPoints = new[] { 90f, 0f, 270f, 180f };
     private static readonly string[] speedNames = new[] { "less than", "exactly", "more than" };
     private static readonly string[] martianDictionary = new[] { "WRINT", "BOMPE", "RINTU", "MUNPO", "EYTAH", "DUNBI", "RAHTU", "OOSLA", "KORBS", "QIBAS", "ZUTUN", "RAJAL", "UFNOR", "GLIMP", "ZULBA", "QORKT", "YVMEL", "HOXZI", "RILBO", "JIHTR", "UNUNT", "KAXNE", "LUTIV", "IPROM" };
-    private static readonly string[] englishDictionary = new[] { "color", "LED", "wire", "Simon", "arrow", "identification", "button", "key", "symbol", "binary", "cipher", "cycle", "forget", "bean", "cruel", "faulty", "talk", "memory", "maze", "double", "grid", "dial", "code", "number" };
+    private static readonly string[] englishDictionary = new[] { "color", "LED", "wire", "simon", "arrow", "identification", "button", "key", "symbol", "binary", "cipher", "cycle", "forget", "bean", "cruel", "faulty", "talk", "memory", "maze", "double", "grid", "dial", "code", "number" };
 
     private bool visible = true;
     private bool isAnimating = false;
