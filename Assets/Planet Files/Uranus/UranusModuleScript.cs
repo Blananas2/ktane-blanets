@@ -239,8 +239,10 @@ public class UranusModuleScript : MonoBehaviour
         WholeThing.SetActive(visible);
         Planet.SetActive(visible);
 
+        if (!visible) { Debug.LogFormat("[Uranus #{0}] Planet hidden; resetting to it's initial state...", moduleId); }
         currentPosition = startingPosition;
         currentValue = 0;
+        moveCounter = 0;
         previousCell = -1;
 
         yield return Ut.Animation(0.75f, d => 
