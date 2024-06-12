@@ -494,7 +494,7 @@ public class jupiterScript : MonoBehaviour {
 	IEnumerator ProcessTwitchCommand(string command)
 	{
 		command = command.Trim().ToUpperInvariant();
-		Match m = Regex.Match(command, @"^(?:(?:MOVE|PRESS)\s+)?[0-9]$");
+		Match m = Regex.Match(command, @"^(?:(?:SUBMIT|PRESS)\s+)?[0-9]$");
 		if (command == "HIDE")
 		{
 			yield return null;
