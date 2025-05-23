@@ -161,10 +161,7 @@ public class EarthScript : MonoBehaviour { //depends on name
         Debug.LogFormat("[Earth #{0}] Starting tri is {1}, {2}, {3}", moduleId, placeNames[tris[startingTri][0]], placeNames[tris[startingTri][1]], placeNames[tris[startingTri][2]]);
         Debug.LogFormat("[Earth #{0}] Ending tri is {1}, {2}, {3}", moduleId, placeNames[tris[endingTri][0]], placeNames[tris[endingTri][1]], placeNames[tris[endingTri][2]]);
 
-        for (int i = 0; i < 3; i++) {
-            ActualButtons[tris[startingTri][i]].GetComponent<MeshRenderer>().material = Colors[1];
-            ActualButtons[tris[endingTri][i]].GetComponent<MeshRenderer>().material = Colors[2];
-        }
+        ColorSpheres();
     }
 
     private IEnumerator PlanetRotation() {
@@ -222,19 +219,7 @@ public class EarthScript : MonoBehaviour { //depends on name
                     currentTri = ChecksOut(i);
                     Debug.LogFormat("[Earth #{0}] Pressed {1}: Location is {2}, {3}, {4}", moduleId, placeNames[i], placeNames[tris[currentTri][0]], placeNames[tris[currentTri][1]], placeNames[tris[currentTri][2]]);
                     Audio.PlaySoundAtTransform("single", transform);
-                    for (int j = 0; j < 48; j ++) {
-                        ActualButtons[j].GetComponent<MeshRenderer>().material = Colors[0];
-                    }
-                    for (int k = 0; k < 6; k++) {
-                        if (k < 3) {
-                            ActualButtons[tris[endingTri][k]].GetComponent<MeshRenderer>().material = Colors[2];
-                            ActualButtons[tris[currentTri][k]].GetComponent<MeshRenderer>().material = Colors[1];
-                        } else {
-                            if (tris[endingTri].Contains(tris[currentTri][k-3])) {
-                                ActualButtons[tris[currentTri][k-3]].GetComponent<MeshRenderer>().material = Colors[3];
-                            }
-                        }
-                    }
+                    ColorSpheres();
                     if (currentTri == endingTri) {
                         GetComponent<KMBombModule>().HandlePass();
                         Debug.LogFormat("[Earth #{0}] Made it to the ending tri. Module solved.", moduleId);
@@ -245,6 +230,23 @@ public class EarthScript : MonoBehaviour { //depends on name
                     GetComponent<KMBombModule>().HandleStrike();
                 }
                 Debug.LogFormat("<Earth #{0}> {1}, {2}, {3} // {4}", moduleId, tris[currentTri][0], tris[currentTri][1], tris[currentTri][2], i);
+            }
+        }
+    }
+
+    void ColorSpheres()
+    {
+        for (int j = 0; j < 48; j ++) {
+            ActualButtons[j].GetComponent<MeshRenderer>().material = Colors[0];
+        }
+        for (int k = 0; k < 6; k++) {
+            if (k < 3) {
+                ActualButtons[tris[endingTri][k]].GetComponent<MeshRenderer>().material = Colors[2];
+                ActualButtons[tris[currentTri][k]].GetComponent<MeshRenderer>().material = Colors[1];
+            } else {
+                if (tris[endingTri].Contains(tris[currentTri][k-3])) {
+                    ActualButtons[tris[currentTri][k-3]].GetComponent<MeshRenderer>().material = Colors[3];
+                }
             }
         }
     }
