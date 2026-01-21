@@ -326,7 +326,7 @@ public class MercuryScript : MonoBehaviour { //depends on name
     {
         new Dictionary<string, object>
         {
-            { "Filename", "Mercury.json" },
+            { "Filename", "MercurySettings.json" },
             { "Name", "Mercury Settings" },
             { "Listings", new List<Dictionary<string, object>>{
                 new Dictionary<string, object>
