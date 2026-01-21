@@ -328,11 +328,12 @@ public class MercuryScript : MonoBehaviour { //depends on name
         {
             { "Filename", "Mercury.json" },
             { "Name", "Mercury Settings" },
-            { "Listing", new List<Dictionary<string, object>>{
+            { "Listings", new List<Dictionary<string, object>>{
                 new Dictionary<string, object>
                 {
                     { "Key", "TotalBalls" },
-                    { "Text", "Number of balls the module will have. Range 5-24 inclusive." }
+                    { "Text", "Ball Count" },
+                    { "Description", "Number of balls the module will have. Range is 5-24 inclusive." }
                 }
             } }
         }
